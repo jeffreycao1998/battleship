@@ -56,7 +56,7 @@ const createBoard = ({player, boardSize}) => {
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
 // shows outine of ship on players board
-const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, shipsNotPlaced) => {
+const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row) => {
   if (shipOrientation === 'horizontal') {
     if (columnIndex + shipLength > boardSize) {
       for (let i = 0; i < shipLength; i++) {
@@ -85,24 +85,53 @@ const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex,
 const unOutlineShipOnBoard = (shipOrientation, columnIndex, board, row) => {
   if (shipOrientation === 'horizontal') {
     for (let i = 0; i < 5; i++) {
-      $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(235, 235, 255)'); 
+      const hasShip = $(`.p${board}-${letters[columnIndex + i]}${row}`).attr('class').split(' ')[2];
+      if (!hasShip) {
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(235, 235, 255)'); 
+      }
     }
   }
   if (shipOrientation === 'vertical') {
     for (let i = 0; i < 5; i++) {
-      $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).css('background-color', 'rgb(235, 235, 255)');
+      const hasShip = $(`.p${board}-${letters[columnIndex + i]}${row}`).attr('class').split(' ')[2];
+      if (!hasShip) {
+        $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).css('background-color', 'rgb(235, 235, 255)');
+      }
     }
   }
 };
 
+const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) => {
+  if (shipOrientation === 'horizontal') {
+    if (columnIndex + shipLength > boardSize) {
+      for (let i = 0; i < shipLength; i++) {
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'red');
+      }
+    } else {
+      for (let i = 0; i < shipLength; i++) {
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(68, 68, 172)');
+      }
+    }
 
+  }
+  if (shipOrientation === 'vertical') {
+    if (Number(row) + shipLength - 1 > boardSize) {
+      for (let i = 0; i < shipLength; i++) {
+        $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).css('background-color', 'red');
+      }
+    } else {
+      for (let i = 0; i < shipLength; i++) {
+        $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).css('background-color', 'rgb(68, 68, 172)');
+      }
+    }
+  }
+}
 
 const addBoardHoverEffects = ({player, shipsNotPlaced, currentShip, boardSize, shipOrientation}) => {
+  // clears previous event listeners before adding the updated event listeners
   $(`.board-p${player}`).children().children('.board-cell').off('mouseover mouseleave click');
-  if (shipsNotPlaced.length === 0) {
-    console.log('all ship placed');
-    return;
-  }
 
   // Change background color of cell
   $(`.board-p${player}`).children().children('.board-cell').on('mouseover', (event) => {
@@ -118,19 +147,19 @@ const addBoardHoverEffects = ({player, shipsNotPlaced, currentShip, boardSize, s
       return;
     }
     if (shipClass === 'carrier') {
-      outlineShipOnBoard(5, boardSize, shipOrientation, columnIndex, board, row, shipsNotPlaced);
+      outlineShipOnBoard(5, boardSize, shipOrientation, columnIndex, board, row);
     }
     if (shipClass === 'battleship') {
-      outlineShipOnBoard(4, boardSize, shipOrientation, columnIndex, board, row, shipsNotPlaced);
+      outlineShipOnBoard(4, boardSize, shipOrientation, columnIndex, board, row);
     }
     if (shipClass === 'cruiser') {
-      outlineShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, shipsNotPlaced);
+      outlineShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row);
     }
     if (shipClass === 'submarine') {
-      outlineShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, shipsNotPlaced);
+      outlineShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row);
     }
     if (shipClass === 'destroyer') {
-      outlineShipOnBoard(2, boardSize, shipOrientation, columnIndex, board, row, shipsNotPlaced);
+      outlineShipOnBoard(2, boardSize, shipOrientation, columnIndex, board, row);
     }
 
   });
@@ -168,7 +197,32 @@ const addBoardHoverEffects = ({player, shipsNotPlaced, currentShip, boardSize, s
   // click a cell on the board
   $(`.board-p${player}`).children().children('.board-cell').on('click', (event) => {
     const target = $(event.target);
-    const clickedCell = target.attr('class').split(' ').slice(1);
-    socket.emit('click cell', clickedCell);
+    const cell = target.attr('class').split(' ')[1];   // A1, A2, A3.... J10
+    const board = cell.charAt(1);
+    const column = cell.charAt(3);   // A, B, C... J
+    const row = cell.slice(4).toString();      // 1, 2, 3... 10
+    const shipClass = shipsNotPlaced[currentShip - 1];
+    const columnIndex = letters.indexOf(column);
+
+    if (target.css('background-color') === 'rgb(255, 0, 0)') {
+      console.log('invalid ship placement');
+      return;
+    }
+    if (shipClass === 'carrier') {
+      placeShipOnBoard(5, boardSize, shipOrientation, columnIndex, board, row, player, currentShip);
+    }
+    if (shipClass === 'battleship') {
+      placeShipOnBoard(4, boardSize, shipOrientation, columnIndex, board, row, player, currentShip);
+    }
+    if (shipClass === 'cruiser') {
+      placeShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, player, currentShip);
+    }
+    if (shipClass === 'submarine') {
+      placeShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, player, currentShip);
+    }
+    if (shipClass === 'destroyer') {
+      placeShipOnBoard(2, boardSize, shipOrientation, columnIndex, board, row, player, currentShip);
+    }
+    socket.emit('place ship', cell);
   })
 }

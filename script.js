@@ -27,9 +27,10 @@ socket.on('load-hover-effects', data => {
   addBoardHoverEffects(data);
 });
 
-socket.on('click cell', data => {
+socket.on('place ship', data => {
   colorCurrentShip(data);
   unColorPlacedShip(data);
+  console.log(data);
   addBoardHoverEffects(data);
 });
 

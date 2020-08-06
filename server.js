@@ -35,11 +35,10 @@ io.on('connect', socket => {
     }
   });
 
-  socket.on('click cell', data => {
+  socket.on('place ship', data => {
     // console.log(socket.data);
     // console.log(data);
-    const boardClicked = Number(data[0][1]);
-    const cellClicked = data[0].slice(3);
+    const boardClicked = Number(data[1]);
     const player = socket.data.player;
 
     if (player === 1 && boardClicked === 1) {
@@ -47,14 +46,14 @@ io.on('connect', socket => {
         return console.log(`Player ${socket.data.player} ships ready for battle!`)
       }
       socket.data.currentShip += 1;
-      io.emit('click cell', {...socket.data});
+      io.emit('place ship', socket.data);
     }
     if (player === 2 && boardClicked === 2) {
       if (socket.data.currentShip > socket.data.shipsNotPlaced.length) {
         return console.log(`Player ${socket.data.player} ships ready for battle!`)
       }
       socket.data.currentShip += 1;
-      io.emit('click cell', {...socket.data});
+      io.emit('place ship', socket.data);
     }
   });
 
