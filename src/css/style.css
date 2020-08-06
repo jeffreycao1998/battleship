@@ -1,0 +1,337 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/*************************/
+/*******MAIN PAGE*********/
+/*************************/
+#main-page {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #f3f3f3;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#main-page .content {
+  width: 1140px;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#main-page .content .title-container {
+  min-width: 500px;
+  margin: 300px auto 0 auto;
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#main-page .content .title-container h1 {
+  font-family: 'Source Code Pro';
+  font-weight: 700;
+  font-size: 70px;
+  display: inline-block;
+  color: #4444ac;
+}
+
+#main-page .content .title-container .input-container {
+  margin-left: 10px;
+  border-bottom: 2px solid #4444ac;
+}
+
+#main-page .content .title-container .input-container input {
+  border: none;
+  font-size: 30px;
+  width: 300px;
+  height: 45px;
+  color: black;
+  padding: 5px 12px;
+  text-align: center;
+  outline: none;
+}
+
+#main-page .content .button-container {
+  width: 700px;
+  margin: 50px auto 0 auto;
+  text-align: center;
+}
+
+#main-page .content .button-container button {
+  width: 250px;
+  background-color: #4444ac;
+  color: white;
+  font-size: 25px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+}
+
+#main-page .content .button-container button:hover {
+  cursor: pointer;
+  background-color: #3a3a92;
+}
+
+#main-page .content .button-container button:active {
+  -webkit-transform: translateY(2px);
+          transform: translateY(2px);
+}
+
+#main-page .content .name-error-message {
+  text-align: center;
+  color: red;
+  margin-top: 10px;
+}
+
+#main-page .content .pun-container {
+  margin-top: 200px;
+  text-align: center;
+}
+
+#main-page .content .pun-container #battleship-pun {
+  color: #4444ac;
+  font-family: arial;
+}
+
+/*************************/
+/*******GAME PAGE*********/
+/*************************/
+#game-page {
+  position: absolute;
+  z-index: 2;
+  background-color: #f3f3f3;
+  max-width: 1920px;
+  height: 1080px;
+  display: none;
+  padding: 50px 100px;
+  border-radius: 2px solid #4444ac;
+  /****PLAYER BOARDS****/
+  /*********LOG**********/
+  /*****LEADERBOARD*******/
+}
+
+#game-page .game-container {
+  width: 970px;
+  height: 100%;
+}
+
+#game-page .game-container .container-p1 {
+  border-bottom: 1px solid #4444ac;
+}
+
+#game-page .game-container .container {
+  width: 100%;
+  height: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#game-page .game-container .container .battleships {
+  width: 400px;
+  height: 100%;
+  border-right: 1px solid #4444ac;
+}
+
+#game-page .game-container .container .battleships .name-container {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
+
+#game-page .game-container .container .battleships .name-container .name {
+  font-family: arial;
+}
+
+#game-page .game-container .container .battleships .all-pieces {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+#game-page .game-container .container .battleships .all-pieces .ship {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 20px;
+  border: 1px solid #4444ac;
+}
+
+#game-page .game-container .container .battleships .all-pieces .ship .piece-cell {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #4444ac;
+  background-color: transparent;
+}
+
+#game-page .game-container .container .board-container {
+  width: 800px;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#game-page .game-container .container .board-container .board {
+  position: relative;
+  border: 1px solid #4444ac;
+}
+
+#game-page .game-container .container .board-container .board .identifier-row {
+  position: absolute;
+  left: -40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#game-page .game-container .container .board-container .board .identifier-column {
+  position: absolute;
+  top: -40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#game-page .game-container .container .board-container .board .identifier {
+  width: 40px;
+  line-height: 40px;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: 600;
+}
+
+#game-page .game-container .container .board-container .board .board-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#game-page .game-container .container .board-container .board .board-row .board-cell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #4444ac;
+  background-color: #ebebff;
+}
+
+#game-page .utility-container {
+  min-width: 450px;
+  max-width: 450px;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#game-page .utility-container .log {
+  min-width: 350px;
+  max-width: 350px;
+  height: 85%;
+  background-color: white;
+  border-radius: 4px;
+}
+
+#game-page .utility-container .btns-container {
+  width: 350px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+#game-page .utility-container .btns-container button {
+  width: 250px;
+  background-color: #4444ac;
+  color: white;
+  font-size: 25px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+}
+
+#game-page .utility-container .btns-container button:hover {
+  cursor: pointer;
+  background-color: #3a3a92;
+}
+
+#game-page .utility-container .btns-container button:active {
+  -webkit-transform: translateY(2px);
+          transform: translateY(2px);
+}
+
+#game-page .utility-container .btns-container .settings {
+  margin-left: 10px;
+}
+
+#game-page .leaderboard-container {
+  min-width: 300px;
+  max-width: 450px;
+  height: 100%;
+  border: 1px solid #4444ac;
+}
+/*# sourceMappingURL=style.css.map */

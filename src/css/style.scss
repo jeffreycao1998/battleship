@@ -1,0 +1,250 @@
+$light-grey: rgb(243, 243, 243);
+$dark-blue: rgb(68, 68, 172);
+$hover-dark-blue: rgb(58, 58, 146);
+$cell-color: rgb(235, 235, 255);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/*************************/
+/*******MAIN PAGE*********/
+/*************************/
+#main-page {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  background-color: $light-grey;
+  justify-content: center;
+  align-items: center;
+  .content {
+    width: 1140px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .title-container {
+      min-width: 500px;
+      margin: 300px auto 0 auto;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      h1 {
+        font-family: 'Source Code Pro';
+        font-weight: 700;
+        font-size: 70px;
+        display: inline-block;
+        color: $dark-blue;
+      }
+      .input-container {
+        margin-left: 10px;
+        border-bottom: 2px solid $dark-blue;
+        input {
+          border: none;
+          font-size: 30px;
+          width: 300px;
+          height: 45px;
+          color: black;
+          padding: 5px 12px;
+          text-align: center;
+          outline: none;
+        }
+      }
+    }
+    .button-container {
+      width: 700px;
+      margin: 50px auto 0 auto;
+      text-align: center;
+      button {
+        width: 250px;
+        background-color: $dark-blue;
+        color: white;
+        font-size: 25px;
+        padding: 10px;
+        outline: none;
+        border: none;
+        border-radius: 2px;
+        &:hover {
+          cursor: pointer;
+          background-color: $hover-dark-blue;
+        }
+        &:active {
+          transform: translateY(2px);
+        }
+      }
+    }
+    .name-error-message {
+      text-align: center;
+      color: red;
+      margin-top: 10px;
+    }
+    .pun-container {
+      margin-top: 200px;
+      text-align: center;
+      #battleship-pun {
+        color: $dark-blue;
+        font-family: arial;
+      }
+    }
+  }
+}
+
+/*************************/
+/*******GAME PAGE*********/
+/*************************/
+#game-page {
+  position: absolute;
+  z-index: 2;
+  background-color: $light-grey;
+  max-width: 1920px;
+  height: 1080px;
+  display: none;
+  padding: 50px 100px;
+  border-radius: 2px solid $dark-blue;
+  /****PLAYER BOARDS****/
+  .game-container {
+    width: 970px;
+    height: 100%;
+    .container-p1 {
+      border-bottom: 1px solid $dark-blue;
+    }
+    .container {
+      width: 100%;
+      height: 50%;
+      display: flex;
+      .battleships {
+        width: 400px;
+        height: 100%;
+        border-right: 1px solid $dark-blue;
+        .name-container {
+          width: 100%;
+          text-align: center;
+          padding: 10px;
+          .name {
+            font-family: arial;
+          }
+        }
+        .all-pieces {
+          display: flex;
+          flex-wrap: wrap;
+          flex-direction: column;
+          align-items: flex-start;
+          .ship {
+            display: flex;
+            margin: 20px;
+            border: 1px solid $dark-blue;
+            background-color: $cell-color;
+            .piece-cell {
+              display: flex;
+              width: 30px;
+              height: 30px;
+              border: 1px solid $dark-blue;
+              background-color: transparent;
+            }
+          }
+        }
+      }
+      .board-container {
+        width: 800px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .board {
+          position: relative;
+          border: 1px solid $dark-blue;
+          .identifier-row {
+            position: absolute;
+            left: -40px;
+            display: flex;
+            flex-direction: column;
+          }
+          .identifier-column {
+            position: absolute;
+            top: -40px;
+            display: flex;
+          }
+          .identifier {
+            width: 40px;
+            line-height: 40px;
+            vertical-align: middle;
+            text-align: center;
+            font-weight: 600;
+          }
+          .board-row {
+            display: flex;
+            .board-cell {
+              width: 40px;
+              height: 40px;
+              border: 1px solid $dark-blue;
+              background-color: $cell-color;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /*********LOG**********/
+  .utility-container {
+    min-width: 450px;
+    max-width: 450px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    .log {
+      min-width: 350px;
+      max-width: 350px;
+      height: 85%;
+      background-color: white;
+      border-radius: 4px;
+    }
+    .btns-container {
+      width: 350px;
+      display: flex;
+      justify-content: space-evenly;
+      button {
+        width: 250px;
+        background-color: $dark-blue;
+        color: white;
+        font-size: 25px;
+        padding: 10px;
+        outline: none;
+        border: none;
+        border-radius: 2px;
+        &:hover {
+          cursor: pointer;
+          background-color: $hover-dark-blue;
+        }
+        &:active {
+          transform: translateY(2px);
+        }
+      }
+      // .concede {
+
+      // }
+      .settings {
+        margin-left: 10px;
+      }
+    }
+  }
+  /*****LEADERBOARD*******/
+  .leaderboard-container {
+    min-width: 300px;
+    max-width: 450px;
+    height: 100%;
+    border: 1px solid $dark-blue;
+  }
+}
