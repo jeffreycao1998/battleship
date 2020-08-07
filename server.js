@@ -22,7 +22,6 @@ io.on('connect', socket => {
       players.push(socket);
 
       io.emit('player joined', socket.data);
-      io.to(players[0].id).emit('load-hover-effects', socket.data);
     } else if (players.length === 1) {
       setInitialData(socket, name, 2);
       players.push(socket);
@@ -30,14 +29,12 @@ io.on('connect', socket => {
 
       io.emit('player joined', socket.data);
       io.emit('player joined', players[0].data);
-      io.to(players[0].id).emit('load-hover-effects', players[0].data);
-      io.to(players[1].id).emit('load-hover-effects', players[1].data);
+      io.to(players[0].id).emit('players place ships',  players[0].data);
+      io.to(players[1].id).emit('players place ships', players[1].data);
     }
   });
 
   socket.on('place ship', data => {
-    // console.log(socket.data);
-    // console.log(data);
     const boardClicked = Number(data[1]);
     const player = socket.data.player;
 
@@ -46,14 +43,16 @@ io.on('connect', socket => {
         return console.log(`Player ${socket.data.player} ships ready for battle!`)
       }
       socket.data.currentShip += 1;
-      io.emit('place ship', socket.data);
+      io.emit('update board', socket.data);
+      io.to(players[0].id).emit('place ship', socket.data);
     }
     if (player === 2 && boardClicked === 2) {
       if (socket.data.currentShip > socket.data.shipsNotPlaced.length) {
         return console.log(`Player ${socket.data.player} ships ready for battle!`)
       }
       socket.data.currentShip += 1;
-      io.emit('place ship', socket.data);
+      io.emit('update board', socket.data);
+      io.to(players[1].id).emit('place ship', socket.data);
     }
   });
 

@@ -23,15 +23,19 @@ socket.on('player joined', data => {
   colorCurrentShip(data);
 });
 
-socket.on('load-hover-effects', data => {
-  addBoardHoverEffects(data);
+socket.on('players place ships', data => {
+  allowPlayerToPlaceShips(data);
 });
 
 socket.on('place ship', data => {
   colorCurrentShip(data);
   unColorPlacedShip(data);
-  console.log(data);
-  addBoardHoverEffects(data);
+  allowPlayerToPlaceShips(data);
+});
+
+socket.on('update board', data => {
+  colorCurrentShip(data);
+  unColorPlacedShip(data);
 });
 
 socket.on('player disconnected', data => {
