@@ -57,6 +57,16 @@ io.on('connect', socket => {
     }
   });
 
+  socket.on('rotate piece', () => {
+    if (socket.data.shipOrientation === 'horizontal') {
+      socket.data.shipOrientation = 'vertical';
+    } else {
+      socket.data.shipOrientation = 'horizontal';
+    }
+    io.to(players[0].id).emit('players place ships', players[0].data);
+    io.to(players[1].id).emit('players place ships', players[1].data);
+  });
+
   socket.on('disconnect', () => {
     const i = players.indexOf(socket);
     if (i && i.data) {
@@ -65,8 +75,6 @@ io.on('connect', socket => {
       io.emit('player disconnected', socket.data);
     }
   });
-
-
 
 });
 
