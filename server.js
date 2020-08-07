@@ -65,6 +65,8 @@ io.on('connect', socket => {
     }
     io.to(players[0].id).emit('players place ships', players[0].data);
     io.to(players[1].id).emit('players place ships', players[1].data);
+
+    io.emit('clear board', '');
   });
 
   socket.on('disconnect', () => {

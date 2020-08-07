@@ -10,8 +10,7 @@ const checkForPlacedShip = (shipLength, board, columnIndex, row, shipOrientation
   } else {
     for (let i = 0; i < shipLength; i++) {
       const boardCell = $(`.p${board}-${column}${(Number(row) + i).toString()}`)
-      // console.log(boardCell.attr('class'))
-      console.log(`.p${board}-${column}${(Number(row) + i).toString()}`)
+
       if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
         return true;
       }
@@ -46,7 +45,6 @@ const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex,
   if (shipOrientation === 'vertical') {
     // stops player from placing overlapping ships
     if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation, column)) {
-      console.log('9999', shipOrientation);
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', 'rgb(172, 103, 103)');
       }
@@ -159,15 +157,9 @@ const allowPlayerToPlaceShips = ({player, shipsNotPlaced, currentShip, boardSize
   $('body').off('keypress');
   $(`.board-p${player}`).children().children('.board-cell').off('mouseover mouseleave click');
 
-  if (shipsNotPlaced.length === 0) {
-    console.log('this function donzo');
-    return;
-  }
-
   // Rotate ship if press 'r' key;
   $(`body`).on('keypress', (event) => {
     if (event.which == 114 && event.target.nodeName.toLowerCase() !== 'input') {
-      console.log('rotate piece')
       socket.emit('rotate piece');
     }
   });

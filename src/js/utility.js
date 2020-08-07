@@ -11,3 +11,13 @@ const updatePlayerName = ({player, name}) => {
   }
   $(`#name-p${player}`).text(name);
 };
+
+const clearBoard = () => {
+  $('.board-cell').each(function() {
+    if ($(this).attr('class').split(' ')[2]) {
+      $(this).css('background-color', 'rgb(102, 102, 168)')
+    } else {
+      $(this).css('background-color', 'rgb(235, 235, 255)')
+    }
+  })
+}

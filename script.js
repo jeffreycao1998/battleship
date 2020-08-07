@@ -40,6 +40,10 @@ socket.on('place ship', data => {
   allowPlayerToPlaceShips(data);
 });
 
+socket.on('clear board', () => {
+  clearBoard();
+});
+
 socket.on('player disconnected', data => {
   updatePlayerName(data);
 });
