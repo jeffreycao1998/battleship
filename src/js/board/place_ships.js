@@ -1,6 +1,15 @@
 // shows outine of ship on players board
 const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row) => {
   if (shipOrientation === 'horizontal') {
+
+    // stops player from placing overlapping ships
+    for (let i = 0; i < shipLength; i++) {
+      const boardCell = $(`.p${board}-${letters[columnIndex + i]}${row}`);
+      if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
+        return;
+      }
+    }
+
     if (columnIndex + shipLength > boardSize) {
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(172, 103, 103)');   // red if part of ship is off board
@@ -13,6 +22,15 @@ const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex,
 
   }
   if (shipOrientation === 'vertical') {
+
+    // stops player from placing overlapping ships
+    for (let i = 0; i < shipLength; i++) {
+      const boardCell = $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`)
+      if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
+        return "invalid ship position";
+      }
+    }
+
     if (Number(row) + shipLength - 1 > boardSize) {
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).css('background-color', 'rgb(172, 103, 103)'); // red if part of ship is off board
@@ -60,6 +78,7 @@ const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, b
       }
     }
 
+    // stops player from placing ships outside of boundaries
     if (columnIndex + shipLength > boardSize) {
       return "invalid ship position";
     } else {
@@ -71,6 +90,7 @@ const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, b
 
   }
   if (shipOrientation === 'vertical') {
+
     // stops player from placing overlapping ships
     for (let i = 0; i < shipLength; i++) {
       const boardCell = $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`)
@@ -79,6 +99,7 @@ const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, b
       }
     }
 
+    // stops player from placing ships outside of boundaries
     if (Number(row) + shipLength - 1 > boardSize) {
       return "invalid ship position";
     } else {
