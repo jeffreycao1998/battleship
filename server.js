@@ -21,14 +21,15 @@ io.on('connect', socket => {
       setInitialData(socket, name, 1);
       players.push(socket);
 
-      io.emit('player joined', socket.data);
+      io.emit('update view', socket.data);
     } else if (players.length === 1) {
       setInitialData(socket, name, 2);
       players.push(socket);
 
+      // 
+      io.emit('update view', socket.data);
+      io.emit('update view', players[0].data);
 
-      io.emit('player joined', socket.data);
-      io.emit('player joined', players[0].data);
       io.to(players[0].id).emit('players place ships',  players[0].data);
       io.to(players[1].id).emit('players place ships', players[1].data);
     }
@@ -43,7 +44,7 @@ io.on('connect', socket => {
         return console.log(`Player ${socket.data.player} ships ready for battle!`)
       }
       socket.data.currentShip += 1;
-      io.emit('update board', socket.data);
+      io.emit('update current ship', socket.data);
       io.to(players[0].id).emit('place ship', socket.data);
     }
     if (player === 2 && boardClicked === 2) {
@@ -51,7 +52,7 @@ io.on('connect', socket => {
         return console.log(`Player ${socket.data.player} ships ready for battle!`)
       }
       socket.data.currentShip += 1;
-      io.emit('update board', socket.data);
+      io.emit('update current ship', socket.data);
       io.to(players[1].id).emit('place ship', socket.data);
     }
   });

@@ -1,6 +1,8 @@
 const socket = io('http://localhost:8000');
 
 // Client Event Handlers
+
+// When game start button is clicked, checks if username entered is 3-14 characters long
 $('#btn-friend').on('click', () => {
   const inputAlias = $('#input-alias').val();
 
@@ -16,11 +18,16 @@ $('#btn-computer').on('click',() => {
 });
 
 // Server Event Handlers
-socket.on('player joined', data => {
+socket.on('update view', data => {
   updatePlayerName(data);
   createBoard(data);
   createShips(data);
   colorCurrentShip(data);
+});
+
+socket.on('update current ship', data => {
+  colorCurrentShip(data);
+  unColorPlacedShip(data);
 });
 
 socket.on('players place ships', data => {
@@ -31,11 +38,6 @@ socket.on('place ship', data => {
   colorCurrentShip(data);
   unColorPlacedShip(data);
   allowPlayerToPlaceShips(data);
-});
-
-socket.on('update board', data => {
-  colorCurrentShip(data);
-  unColorPlacedShip(data);
 });
 
 socket.on('player disconnected', data => {

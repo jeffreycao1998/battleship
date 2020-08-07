@@ -56,15 +56,12 @@ const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, b
     for (let i = 0; i < shipLength; i++) {
       const boardCell = $(`.p${board}-${letters[columnIndex + i]}${row}`);
       if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
-        return "ships can't overlap";
+        return "invalid ship position";
       }
     }
 
     if (columnIndex + shipLength > boardSize) {
-      for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${letters[columnIndex + i]}${row}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
-        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(172, 103, 103)');    // red if out of bounds
-      }
+      return "invalid ship position";
     } else {
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${letters[columnIndex + i]}${row}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
@@ -78,16 +75,15 @@ const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, b
     for (let i = 0; i < shipLength; i++) {
       const boardCell = $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`)
       if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
-        return "ships can't overlap";
+        return "invalid ship position";
       }
     }
 
     if (Number(row) + shipLength - 1 > boardSize) {
-      for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).css('background-color', 'rgb(172, 103, 103)');  // red if out of bounds
-      }
+      return "invalid ship position";
     } else {
       for (let i = 0; i < shipLength; i++) {
+        $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
         $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).css('background-color', 'rgb(102, 102, 168)');  // blue if in bounds
       }
     }
@@ -178,27 +174,27 @@ const allowPlayerToPlaceShips = ({player, shipsNotPlaced, currentShip, boardSize
     }
 
     if (shipClass === 'carrier') {
-      if (placeShipOnBoard(5, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "ships can't overlap") {
+      if (placeShipOnBoard(5, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "invalid ship position") {
         return;
       };
     }
     if (shipClass === 'battleship') {
-      if (placeShipOnBoard(4, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "ships can't overlap") {
+      if (placeShipOnBoard(4, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "invalid ship position") {
         return;
       };
     }
     if (shipClass === 'cruiser') {
-      if (placeShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "ships can't overlap") {
+      if (placeShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "invalid ship position") {
         return;
       };
     }
     if (shipClass === 'submarine') {
-      if (placeShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "ships can't overlap") {
+      if (placeShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "invalid ship position") {
         return;
       };
     }
     if (shipClass === 'destroyer') {
-      if (placeShipOnBoard(2, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "ships can't overlap") {
+      if (placeShipOnBoard(2, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) === "invalid ship position") {
         return;
       };
     }
