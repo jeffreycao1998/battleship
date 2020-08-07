@@ -1,13 +1,30 @@
-// shows outine of ship on players board
-const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row) => {
+const checkForPlacedShip = (shipLength, board, columnIndex, row, shipOrientation) => {
   if (shipOrientation === 'horizontal') {
-
-    // stops player from placing overlapping ships
     for (let i = 0; i < shipLength; i++) {
       const boardCell = $(`.p${board}-${letters[columnIndex + i]}${row}`);
       if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
-        return;
+        return true;
       }
+    }
+    return false;
+  } else {
+    for (let i = 0; i < shipLength; i++) {
+      const boardCell = $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`)
+      if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
+        return true;
+      }
+    }
+    return false;
+  }
+};
+
+// shows outine of ship on players board
+const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row) => {
+  if (shipOrientation === 'horizontal') {
+        
+    // stops player from placing overlapping ships
+    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation)) {
+      return;
     }
 
     if (columnIndex + shipLength > boardSize) {
@@ -24,11 +41,8 @@ const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex,
   if (shipOrientation === 'vertical') {
 
     // stops player from placing overlapping ships
-    for (let i = 0; i < shipLength; i++) {
-      const boardCell = $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`)
-      if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
-        return "invalid ship position";
-      }
+    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation)) {
+      return;
     }
 
     if (Number(row) + shipLength - 1 > boardSize) {
@@ -69,40 +83,34 @@ const unOutlineShipOnBoard = (shipOrientation, columnIndex, board, row) => {
 const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, player, currentShip) => {
 
   if (shipOrientation === 'horizontal') {
-
     // stops player from placing overlapping ships
-    for (let i = 0; i < shipLength; i++) {
-      const boardCell = $(`.p${board}-${letters[columnIndex + i]}${row}`);
-      if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
-        return "invalid ship position";
-      }
+    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation)) {
+      return 'invalid ship position';
     }
 
     // stops player from placing ships outside of boundaries
     if (columnIndex + shipLength > boardSize) {
       return "invalid ship position";
     } else {
+      // if not out of bounds, then place ship on board
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${letters[columnIndex + i]}${row}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
         $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(102, 102, 168)');    //  blue if in bounds
       }
     }
-
   }
-  if (shipOrientation === 'vertical') {
 
+  if (shipOrientation === 'vertical') {
     // stops player from placing overlapping ships
-    for (let i = 0; i < shipLength; i++) {
-      const boardCell = $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`)
-      if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
-        return "invalid ship position";
-      }
+    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation)) {
+      return 'invalid ship position';
     }
 
     // stops player from placing ships outside of boundaries
     if (Number(row) + shipLength - 1 > boardSize) {
       return "invalid ship position";
     } else {
+      // if not out of bounds then place ship on board
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
         $(`.p${board}-${columnIndex}${(Number(row) + i).toString}`).css('background-color', 'rgb(102, 102, 168)');  // blue if in bounds
