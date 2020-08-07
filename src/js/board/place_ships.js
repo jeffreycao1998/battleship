@@ -10,6 +10,8 @@ const checkForPlacedShip = (shipLength, board, columnIndex, row, shipOrientation
   } else {
     for (let i = 0; i < shipLength; i++) {
       const boardCell = $(`.p${board}-${column}${(Number(row) + i).toString()}`)
+      // console.log(boardCell.attr('class'))
+      console.log(`.p${board}-${column}${(Number(row) + i).toString()}`)
       if (boardCell.attr('class') && boardCell.attr('class').split(' ')[2]) {
         return true;
       }
@@ -22,7 +24,7 @@ const checkForPlacedShip = (shipLength, board, columnIndex, row, shipOrientation
 const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, column) => {
   if (shipOrientation === 'horizontal') {
     // stops player from placing overlapping ships
-    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation)) {
+    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation, column)) {
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(172, 103, 103)');
       }
@@ -43,7 +45,8 @@ const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex,
 
   if (shipOrientation === 'vertical') {
     // stops player from placing overlapping ships
-    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation)) {
+    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation, column)) {
+      console.log('9999', shipOrientation);
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', 'rgb(172, 103, 103)');
       }
@@ -97,7 +100,7 @@ const unOutlineShipOnBoard = (shipOrientation, columnIndex, board, row, column) 
 const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, player, currentShip, column) => {
   if (shipOrientation === 'horizontal') {
     // stops player from placing overlapping ships
-    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation)) {
+    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation, column)) {
       return 'invalid ship position';
     }
 
@@ -115,7 +118,7 @@ const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, b
 
   if (shipOrientation === 'vertical') {
     // stops player from placing overlapping ships
-    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation)) {
+    if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation, column)) {
       return 'invalid ship position';
     }
 
@@ -171,9 +174,8 @@ const allowPlayerToPlaceShips = ({player, shipsNotPlaced, currentShip, boardSize
 
   // Outlines ship on board
   $(`.board-p${player}`).children().children('.board-cell').on('mouseover', (event) => {
-
     const { cell, board, column, row, shipClass, columnIndex } = getEventDetails(event, shipsNotPlaced, currentShip);
-    console.log(player, board);
+    
     if (player !== Number(board)) {
       return;
     }
