@@ -20,12 +20,12 @@ const checkForPlacedShip = (shipLength, board, columnIndex, row, shipOrientation
 };
 
 // shows outine of ship on players board
-const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, column) => {
+const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell) => {
   if (shipOrientation === 'horizontal') {
     // stops player from placing overlapping ships
     if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation, column)) {
       for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(172, 103, 103)');
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', colorRed);
       }
       return;
     }
@@ -33,11 +33,11 @@ const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex,
     // outlines a ship in red if off board, blue otherwise
     if (columnIndex + shipLength > boardSize) {
       for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(172, 103, 103)');   // red if part of ship is off board
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', colorRed);   // red if part of ship is off board
       }
     } else {
       for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(102, 102, 168)');  // blue if entire ship is on board
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', colorBlue);  // blue if entire ship is on board
       }
     }
   }
@@ -46,7 +46,7 @@ const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex,
     // stops player from placing overlapping ships
     if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation, column)) {
       for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', 'rgb(172, 103, 103)');
+        $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', colorRed);
       }
       return;
     }
@@ -54,17 +54,17 @@ const outlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex,
     // outlines a ship in red if off board, blue otherwise
     if (Number(row) + shipLength - 1 > boardSize) {
       for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', 'rgb(172, 103, 103)'); // red if part of ship is off board
+        $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', colorRed);
       }
     } else {
       for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', 'rgb(102, 102, 168)');  // blue if entire ship is on board
+        $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', colorBlue);
       }
     }
   }
 };
 
-const unOutlineShipOnBoard = (shipOrientation, columnIndex, board, row, column) => {
+const unOutlineShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell) => {
   if (shipOrientation === 'horizontal') {
     // removes outline for ship when not hovering over that piece anymore
     for (let i = 0; i < 5; i++) {
@@ -72,9 +72,9 @@ const unOutlineShipOnBoard = (shipOrientation, columnIndex, board, row, column) 
         const hasShip = $(`.p${board}-${letters[columnIndex + i]}${row}`).attr('class').split(' ')[2];
 
         if (hasShip) {
-          $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(102, 102, 168)');
+          $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', colorBlue);
         } else {
-          $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(235, 235, 255)');
+          $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', colorLightBlue);
         }
       }
     }
@@ -86,30 +86,29 @@ const unOutlineShipOnBoard = (shipOrientation, columnIndex, board, row, column) 
         const hasShip = $(`.p${board}-${column}${(Number(row) + i).toString()}`).attr('class').split(' ')[2];
 
         if (hasShip) {
-          $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', 'rgb(102, 102, 168)');
+          $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', colorBlue);
         } else {
-          $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', 'rgb(235, 235, 255)');
+          $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', colorLightBlue);
         }
       }
     }
   }
 };
 
-const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, player, currentShip, column) => {
+const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell, shipClass) => {
   if (shipOrientation === 'horizontal') {
     // stops player from placing overlapping ships
     if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation, column)) {
-      return 'invalid ship position';
+      return;
     }
 
     // stops player from placing ships outside of boundaries
     if (columnIndex + shipLength > boardSize) {
-      return "invalid ship position";
+      return //"invalid ship position";
     } else {
-      // if not out of bounds, then place ship on board
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${letters[columnIndex + i]}${row}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
-        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', 'rgb(102, 102, 168)');    //  blue if in bounds
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', colorBlue);    //  blue if in bounds
       }
     }
   }
@@ -117,22 +116,23 @@ const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, b
   if (shipOrientation === 'vertical') {
     // stops player from placing overlapping ships
     if (checkForPlacedShip(shipLength, board, columnIndex, row, shipOrientation, column)) {
-      return 'invalid ship position';
+      return;
     }
 
     // stops player from placing ships outside of boundaries
     if (Number(row) + shipLength - 1 > boardSize) {
-      return "invalid ship position";
+      return;
     } else {
-      // if not out of bounds then place ship on board
       for (let i = 0; i < shipLength; i++) {
         $(`.p${board}-${column}${(Number(row) + i).toString()}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
-        $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', 'rgb(102, 102, 168)');  // blue if in bounds
+        $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', colorBlue);  // blue if in bounds
       }
     }
   }
+  socket.emit('place ship', cell);
 }
 
+// givesaccess to info on player and event triggerer
 const getEventDetails = (event, shipsNotPlaced, currentShip) => {
   const target = $(event.target);
   const cell = target.attr('class').split(' ')[1];  // A1, A2, A3.... J10
@@ -152,6 +152,28 @@ const getEventDetails = (event, shipsNotPlaced, currentShip) => {
   }
 }
 
+// performs 'theFunction' on given arguments
+const performFunction = (theFunction, shipClass, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell) => {
+  if (player !== Number(board)) {
+    return;
+  }
+  if (shipClass === 'carrier') {
+    theFunction(5, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell);
+  }
+  if (shipClass === 'battleship') {
+    theFunction(4, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell);
+  }
+  if (shipClass === 'cruiser') {
+    theFunction(3, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell);
+  }
+  if (shipClass === 'submarine') {
+    theFunction(3, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell);
+  }
+  if (shipClass === 'destroyer') {
+    theFunction(2, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell);
+  }
+}
+
 const allowPlayerToPlaceShips = ({player, shipsNotPlaced, currentShip, boardSize, shipOrientation}) => {
   // clears previous event listeners before adding the updated event listeners
   $('body').off('keypress');
@@ -168,81 +190,20 @@ const allowPlayerToPlaceShips = ({player, shipsNotPlaced, currentShip, boardSize
   $(`.board-p${player}`).children().children('.board-cell').on('mouseover', (event) => {
     const { cell, board, column, row, shipClass, columnIndex } = getEventDetails(event, shipsNotPlaced, currentShip);
     
-    if (player !== Number(board)) {
-      return;
-    }
-    if (shipClass === 'carrier') {
-      outlineShipOnBoard(5, boardSize, shipOrientation, columnIndex, board, row, column);
-    }
-    if (shipClass === 'battleship') {
-      outlineShipOnBoard(4, boardSize, shipOrientation, columnIndex, board, row, column);
-    }
-    if (shipClass === 'cruiser') {
-      outlineShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, column);
-    }
-    if (shipClass === 'submarine') {
-      outlineShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, column);
-    }
-    if (shipClass === 'destroyer') {
-      outlineShipOnBoard(2, boardSize, shipOrientation, columnIndex, board, row, column);
-    }
-
+    performFunction(outlineShipOnBoard, shipClass, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell);
   });
 
   // Unoutline ship on board
   $(`.board-p${player}`).children().children('.board-cell').on('mouseleave', (event) => {
     const { cell, board, column, row, shipClass, columnIndex } = getEventDetails(event, shipsNotPlaced, currentShip);
 
-    if (player !== Number(board)) {
-      return;
-    }
-    
-    if (shipClass === 'carrier') {
-      unOutlineShipOnBoard(shipOrientation, columnIndex, board, row, column);
-    }
-    if (shipClass === 'battleship') {
-      unOutlineShipOnBoard(shipOrientation, columnIndex, board, row, column);
-    }
-    if (shipClass === 'cruiser') {
-      unOutlineShipOnBoard(shipOrientation, columnIndex, board, row, column);
-    }
-    if (shipClass === 'submarine') {
-      unOutlineShipOnBoard(shipOrientation, columnIndex, board, row, column);
-    }
-    if (shipClass === 'destroyer') {
-      unOutlineShipOnBoard(shipOrientation, columnIndex, board, row, column);
-    }
+    performFunction(unOutlineShipOnBoard, shipClass, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell);
   });
 
   // Place ship onto board
   $(`.board-p${player}`).children().children('.board-cell').on('click', (event) => {
     const { cell, board, column, row, shipClass, columnIndex } = getEventDetails(event, shipsNotPlaced, currentShip);
 
-    if (shipClass === 'carrier') {
-      if (placeShipOnBoard(5, boardSize, shipOrientation, columnIndex, board, row, player, currentShip, column) === "invalid ship position") {
-        return;
-      };
-    }
-    if (shipClass === 'battleship') {
-      if (placeShipOnBoard(4, boardSize, shipOrientation, columnIndex, board, row, player, currentShip, column) === "invalid ship position") {
-        return;
-      };
-    }
-    if (shipClass === 'cruiser') {
-      if (placeShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, player, currentShip, column) === "invalid ship position") {
-        return;
-      };
-    }
-    if (shipClass === 'submarine') {
-      if (placeShipOnBoard(3, boardSize, shipOrientation, columnIndex, board, row, player, currentShip, column) === "invalid ship position") {
-        return;
-      };
-    }
-    if (shipClass === 'destroyer') {
-      if (placeShipOnBoard(2, boardSize, shipOrientation, columnIndex, board, row, player, currentShip, column) === "invalid ship position") {
-        return;
-      };
-    }
-    socket.emit('place ship', cell);
+    performFunction(placeShipOnBoard, shipClass, boardSize, shipOrientation, columnIndex, board, row, column, player, currentShip, cell);
   })
 }

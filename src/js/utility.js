@@ -15,9 +15,9 @@ const updatePlayerName = ({player, name}) => {
 const clearBoard = () => {
   $('.board-cell').each(function() {
     if ($(this).attr('class').split(' ')[2]) {
-      $(this).css('background-color', 'rgb(102, 102, 168)')
+      $(this).css('background-color', colorBlue)
     } else {
-      $(this).css('background-color', 'rgb(235, 235, 255)')
+      $(this).css('background-color', colorLightBlue)
     }
   })
 }
