@@ -1,21 +1,6 @@
 const socket = io('http://localhost:8000');
 
-// Client Event Handlers
-
-// When game start button is clicked, checks if username entered is 3-14 characters long
-$('#btn-friend').on('click', () => {
-  const inputAlias = $('#input-alias').val();
-
-  if (!inputAlias || inputAlias.length < 3 || inputAlias.length > 14) {
-    return $('.name-error-message').text('Stop! Name must be 3-14 characters in length')
-  }
-  socket.emit('name', inputAlias);
-  makeFullscreen()
-});
-
-$('#btn-computer').on('click',() => {
-  makeFullscreen();
-});
+addButtonEventHandlers();
 
 // Server Event Handlers
 socket.on('update view', data => {

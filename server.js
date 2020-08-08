@@ -73,6 +73,10 @@ io.on('connect', socket => {
     }
   });
 
+  socket.on('rematch', name => {
+    
+  });
+
   socket.on('rotate piece', () => {
     if (socket.data.shipOrientation === 'horizontal') {
       socket.data.shipOrientation = 'vertical';
