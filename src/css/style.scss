@@ -7,7 +7,8 @@ $cell-color: rgb(235, 235, 255);
 // $-not-used-board-ship-out-of-boundary-color: rgb(172, 103, 103);
 
 .rainbow-text {
-  background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red); -webkit-background-clip: text;
+  background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red); 
+  -webkit-background-clip: text;
   color: transparent;
 }
 

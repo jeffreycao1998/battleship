@@ -81,8 +81,17 @@ io.on('connect', socket => {
     io.emit('update view', socket.data);
     io.emit('update view', players[0].data);
 
-    io.to(players[0].id).emit('players place ships',  players[0].data);
-    io.to(players[1].id).emit('players place ships', players[1].data);
+    if (socket.data.player == 1) {
+      shipCoordinates.p1 = {reset: true};
+    }
+    if (socket.data.player == 2) {
+      shipCoordinates.p2 = {reset: true};
+    }
+
+    if (shipCoordinates.p1.reset && shipCoordinates.p2.reset) {
+      io.to(players[0].id).emit('players place ships',  players[0].data);
+      io.to(players[1].id).emit('players place ships', players[1].data);
+    }
   });
 
   socket.on('rotate piece', () => {

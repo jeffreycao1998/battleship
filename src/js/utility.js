@@ -49,20 +49,9 @@ const addButtonEventHandlers = () => {
     // hides win screen
     $('#winning-screen').css('display', 'none');
 
-    // resets board to default state
-    // $('.board-cell').each(function() {
-    //   const defaultClasses = $(this).attr('class').split(' ').slice(0, 2);
-    //   console.log(defaultClasses);
-    //   $(this).removeClass();
-    //   $(this).addClass(defaultClasses[0]);
-    //   $(this).addClass(defaultClasses[1]);
-    //   $(this).css('background-color', colorLightBlue);
-    // });
+    // removes all event listeners on board
+    $('.board-cell').off('mouseover mouseleave click keypress');
 
-    // // resets pieces to default state
-    // $('.piece-cell').each(function() {
-    //   $(this).css('background-color', colorLightBlue);
-    // })
     socket.emit('rematch');
   });
 };
