@@ -1,3 +1,10 @@
+.rainbow-text {
+  background-image: -webkit-gradient(linear, right top, left top, from(violet), color-stop(indigo), color-stop(blue), color-stop(green), color-stop(yellow), color-stop(orange), to(red));
+  background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -339,13 +346,34 @@ body {
 /*************************/
 #winning-screen {
   position: absolute;
-  background-color: #f3f3f3;
   max-width: 1920px;
   height: 1080px;
   display: none;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
-#winning-screen .winning-container {
+#winning-screen .winning-container-background {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0 50px 50px 50px;
+  margin: 220px 100px 0 100px;
+  border-radius: 4px;
+  border: 1px solid #4444ac;
+}
+
+#winning-screen .winning-container-background .winning-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -355,10 +383,43 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  position: relative;
 }
 
-#winning-screen .winning-container .winning-text {
-  font-size: 40px;
-  margin: 0 100px;
+#winning-screen .winning-container-background .winning-container .gif-left {
+  position: relative;
+  top: 50px;
+}
+
+#winning-screen .winning-container-background .winning-container .winning-text {
+  font-family: 'arial';
+  font-size: 100px;
+  text-align: center;
+}
+
+#winning-screen .winning-container-background .winning-container .gif-right {
+  position: relative;
+  top: 50px;
+}
+
+#winning-screen .winning-container-background button {
+  width: 250px;
+  background-color: #4444ac;
+  color: white;
+  font-size: 25px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+}
+
+#winning-screen .winning-container-background button:hover {
+  cursor: pointer;
+  background-color: #3a3a92;
+}
+
+#winning-screen .winning-container-background button:active {
+  -webkit-transform: translateY(2px);
+          transform: translateY(2px);
 }
 /*# sourceMappingURL=style.css.map */

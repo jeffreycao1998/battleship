@@ -57,9 +57,7 @@ socket.on('miss ship', cell => {
 });
 
 socket.on('won game', player => {
-  $('.board-cell').unbind();
-  // modal popup
-  // 
+  showWinScreen(player);
 });
 
 socket.on('player disconnected', data => {

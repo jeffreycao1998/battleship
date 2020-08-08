@@ -127,7 +127,7 @@ io.on('connect', socket => {
         socket.data.targetsHit += 1;
         io.emit('hit ship', { ship, cell });
         if (socket.data.targetsHit === socket.data.targets) {
-          io.emit('won game', socket.data.player);
+          io.emit('won game', socket.data.name);
         }
       } else {
         io.emit('miss ship', cell);
@@ -139,7 +139,7 @@ io.on('connect', socket => {
         socket.data.targetsHit += 1;
         io.emit('hit ship', { ship, cell });
         if (socket.data.targetsHit === socket.data.targets) {
-          io.emit('won game', socket.data.player);
+          io.emit('won game', socket.data.name);
         }
       } else {
         io.emit('miss ship', cell);

@@ -1,8 +1,8 @@
 const makeFullscreen = () => {
   $('#game-page').css("display", "flex");
-  // document.documentElement.requestFullscreen().catch((err) => {
-  //   console.log(err);
-  // });
+  document.documentElement.requestFullscreen().catch((err) => {
+    console.log(err);
+  });
 }
 
 const updatePlayerName = ({player, name}) => {
@@ -21,3 +21,9 @@ const clearBoard = () => {
     }
   })
 }
+
+const showWinScreen = (player) => {
+  $('.board-cell').unbind();
+  $('#winning-screen').css('display', 'flex');
+  $('.winning-text').text(`${player.toUpperCase()} WON!`)
+};
