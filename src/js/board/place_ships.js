@@ -107,8 +107,12 @@ const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, b
       return //"invalid ship position";
     } else {
       for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${letters[columnIndex + i]}${row}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
+        $(`.p${board}-${letters[columnIndex + i]}${row}`).addClass(`p${player}-ship-${currentShip - 1}-${i + 1}`)
         $(`.p${board}-${letters[columnIndex + i]}${row}`).css('background-color', colorBlue);    //  blue if in bounds
+        socket.emit('store coordinates', {
+          cell: `p${board}-${letters[columnIndex + i]}${row}`,
+          ship: `p${board}-ship-${currentShip - 1}-${i + 1}`,
+        });
       }
     }
   }
@@ -124,12 +128,16 @@ const placeShipOnBoard = (shipLength, boardSize, shipOrientation, columnIndex, b
       return;
     } else {
       for (let i = 0; i < shipLength; i++) {
-        $(`.p${board}-${column}${(Number(row) + i).toString()}`).addClass(`p${player}-ship-${currentShip}-${i + 1}`)
+        $(`.p${board}-${column}${(Number(row) + i).toString()}`).addClass(`p${player}-ship-${currentShip - 1}-${i + 1}`)
         $(`.p${board}-${column}${(Number(row) + i).toString()}`).css('background-color', colorBlue);  // blue if in bounds
+        socket.emit('store coordinates', {
+          cell: `p${board}-${column}${(Number(row) + i).toString()}`,
+          ship: `p${board}-ship-${currentShip - 1}-${i + 1}`,
+        });
       }
     }
   }
-  socket.emit('place ship', cell);
+  socket.emit('increment currentShip count', cell);
 }
 
 // givesaccess to info on player and event triggerer
@@ -178,6 +186,10 @@ const allowPlayerToPlaceShips = ({player, shipsNotPlaced, currentShip, boardSize
   // clears previous event listeners before adding the updated event listeners
   $('body').off('keypress');
   $(`.board-p${player}`).children().children('.board-cell').off('mouseover mouseleave click');
+  
+  if (currentShip > shipsNotPlaced.length) {
+    return socket.emit('player ready', player);
+  }
 
   // Rotate ship if press 'r' key;
   $(`body`).on('keypress', (event) => {

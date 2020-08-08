@@ -128,13 +128,11 @@ body {
 /*************************/
 #game-page {
   position: absolute;
-  z-index: 2;
   background-color: #f3f3f3;
   max-width: 1920px;
   height: 1080px;
   display: none;
   padding: 50px 100px;
-  border-radius: 2px solid #4444ac;
   /****PLAYER BOARDS****/
   /*********LOG**********/
   /*****LEADERBOARD*******/
@@ -194,6 +192,7 @@ body {
   display: flex;
   margin: 20px;
   border: 1px solid #4444ac;
+  background-color: #ebebff;
 }
 
 #game-page .game-container .container .battleships .all-pieces .ship .piece-cell {
@@ -333,5 +332,33 @@ body {
   max-width: 450px;
   height: 100%;
   border: 1px solid #4444ac;
+}
+
+/*************************/
+/*****WINNING SCREEN******/
+/*************************/
+#winning-screen {
+  position: absolute;
+  background-color: #f3f3f3;
+  max-width: 1920px;
+  height: 1080px;
+  display: none;
+}
+
+#winning-screen .winning-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#winning-screen .winning-container .winning-text {
+  font-size: 40px;
+  margin: 0 100px;
 }
 /*# sourceMappingURL=style.css.map */

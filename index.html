@@ -83,6 +83,14 @@
     </div>
   </section>
 
+  <section id="winning-screen">
+    <div class="winning-container">
+      <img class="gif-left" src="./src/images/giphy.gif" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen>
+      <h1 class="winning-text">Player 1 Won!</h1>
+      <img class="gif-right" src="./src/images/giphy.gif" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen>
+    </div>
+  </section>
+
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="http://localhost:8000/socket.io/socket.io.js"></script>
   <!-- game setup -->
@@ -91,6 +99,7 @@
   <!-- board -->
   <script src="src/js/board/generate_board.js"></script>
   <script src="src/js/board/place_ships.js"></script>
+  <script src="src/js/board/attack_ships.js"></script>
   <!-- ships -->
   <script src="src/js/ship/generate_ships.js"></script> 
   <script src="src/js/ship/show_current_ship.js"></script>

@@ -44,6 +44,24 @@ socket.on('clear board', () => {
   clearBoard();
 });
 
+socket.on('start attack', data => {
+  allowPlayersToAttack(data);
+});
+
+socket.on('hit ship', ship => {
+  hitShip(ship);
+});
+
+socket.on('miss ship', cell => {
+  missShip(cell);
+});
+
+socket.on('won game', player => {
+  $('.board-cell').unbind();
+  // modal popup
+  // 
+});
+
 socket.on('player disconnected', data => {
   updatePlayerName(data);
 });

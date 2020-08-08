@@ -2,8 +2,9 @@ $light-grey: rgb(243, 243, 243);
 $dark-blue: rgb(68, 68, 172);
 $hover-dark-blue: rgb(58, 58, 146);
 $cell-color: rgb(235, 235, 255);
-$-not-used-board-ship-color: rgb(102, 102, 168);
-$-not-used-board-ship-out-of-boundary-color: rgb(172, 103, 103);
+
+// $-not-used-board-ship-color: rgb(102, 102, 168);
+// $-not-used-board-ship-out-of-boundary-color: rgb(172, 103, 103);
 
 * {
   margin: 0;
@@ -106,13 +107,11 @@ body {
 /*************************/
 #game-page {
   position: absolute;
-  z-index: 2;
   background-color: $light-grey;
   max-width: 1920px;
   height: 1080px;
   display: none;
   padding: 50px 100px;
-  border-radius: 2px solid $dark-blue;
   /****PLAYER BOARDS****/
   .game-container {
     width: 970px;
@@ -248,5 +247,31 @@ body {
     max-width: 450px;
     height: 100%;
     border: 1px solid $dark-blue;
+  }
+}
+
+/*************************/
+/*****WINNING SCREEN******/
+/*************************/
+#winning-screen {
+  position: absolute;
+  background-color: $light-grey;
+  max-width: 1920px;
+  height: 1080px;
+  display: none;
+  .winning-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .gif-left {
+
+    }
+    .winning-text {
+      font-size: 40px;
+      margin: 0 100px;
+    }
+    .gif-right {
+
+    }
   }
 }
