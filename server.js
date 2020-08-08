@@ -64,7 +64,6 @@ io.on('connect', socket => {
       setInitialData(socket, name, 2);
       players.push(socket);
 
-      // 
       io.emit('update view', socket.data);
       io.emit('update view', players[0].data);
 
@@ -74,7 +73,16 @@ io.on('connect', socket => {
   });
 
   socket.on('rematch', name => {
-    
+    const p1Name = players[0].data.name;
+    const p2Name = players[1].data.name;
+    setInitialData(players[0], p1Name, 1);
+    setInitialData(players[1], p2Name, 2);
+
+    io.emit('update view', socket.data);
+    io.emit('update view', players[0].data);
+
+    io.to(players[0].id).emit('players place ships',  players[0].data);
+    io.to(players[1].id).emit('players place ships', players[1].data);
   });
 
   socket.on('rotate piece', () => {

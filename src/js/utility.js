@@ -46,21 +46,23 @@ const addButtonEventHandlers = () => {
   });
 
   $('#rematch').on('click', () => {
-    // resets board to default state
-    $('.boardCell').each(function() {
-      const defaultClasses = $(this).attr('class').split(' ').slice(0, 2);
-      $(this).removeClass('');
-      $(this).addClass(defaultClasses[0]);
-      $(this).addClass(defaultClasses[1]);
-      $(this).css('background-color', colorLightBlue);
-    });
+    // hides win screen
+    $('#winning-screen').css('display', 'none');
 
-    $('.pieceCell').each(function() {
-      const defaultClasses = $(this).attr('class').split(' ').slice(0, 2);
-      $(this).removeClass('');
-      $(this).addClass(defaultClasses[0]);
-      $(this).addClass(defaultClasses[1]);
-      $(this).css('background-color', colorLightBlue);
-    })
+    // resets board to default state
+    // $('.board-cell').each(function() {
+    //   const defaultClasses = $(this).attr('class').split(' ').slice(0, 2);
+    //   console.log(defaultClasses);
+    //   $(this).removeClass();
+    //   $(this).addClass(defaultClasses[0]);
+    //   $(this).addClass(defaultClasses[1]);
+    //   $(this).css('background-color', colorLightBlue);
+    // });
+
+    // // resets pieces to default state
+    // $('.piece-cell').each(function() {
+    //   $(this).css('background-color', colorLightBlue);
+    // })
+    socket.emit('rematch');
   });
 };
