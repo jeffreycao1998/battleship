@@ -476,6 +476,9 @@ body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   display: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -502,6 +505,35 @@ body {
 #settings-screen .settings-container #settings {
   border: none;
   margin-bottom: 10px;
+}
+
+#settings-screen .settings-container .close-settings {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: white;
+  top: 10px;
+  right: 10px;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 3px;
+  border-radius: 4px;
+  background-color: #cf2727;
+}
+
+#settings-screen .settings-container .close-settings ion-icon {
+  width: 20px;
+  height: 20px;
+  color: white;
+  font-weight: 400;
 }
 
 #settings-screen .settings-container > * {
@@ -558,6 +590,50 @@ body {
 #settings-screen .settings-container > * > * .modify button:hover {
   cursor: pointer;
   background-color: #3a3a92;
+}
+
+#settings-screen .settings-container .first-shot-settings h4 {
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+#settings-screen .settings-container .first-shot-settings .first-shot-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#settings-screen .settings-container .first-shot-settings .first-shot-buttons label {
+  font-size: 17px;
+  line-height: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#settings-screen .settings-container .first-shot-settings .first-shot-buttons label input {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: white;
+  outline: none;
+  border: 3px solid white;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+#settings-screen .settings-container .first-shot-settings .first-shot-buttons label input:checked {
+  background: #4444ac;
 }
 
 #settings-screen .settings-container #apply-settings {

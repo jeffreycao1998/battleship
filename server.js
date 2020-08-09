@@ -69,6 +69,7 @@ const changePlayerTurn = (socket) => {
   io.emit('turn', players[0].data.turnToShoot ? 1 : 2);
 }
 
+let whoseTurn = 'random';
 const players = [];
 const shipCoordinates = {
   p1: {},
@@ -106,7 +107,7 @@ io.on('connect', socket => {
     }
   });
 
-  socket.on('apply settings', ({ boardSize, shotsPerTurn, shipsNotPlaced }) => {
+  socket.on('apply settings', ({ boardSize, shotsPerTurn, shipsNotPlaced, firstShot }) => {
     if (!players[1]) {
       return;
     }
@@ -119,6 +120,8 @@ io.on('connect', socket => {
     players[1].data.boardSize = boardSize;
     players[1].data.shotsPerTurn = shotsPerTurn;
     players[1].data.shipsNotPlaced = shipsNotPlaced;
+
+    whoseTurn = firstShot;   // applys setting for who shoots first;
 
     // reset to default
     players[0].data.targetsHit = 0;
@@ -216,7 +219,15 @@ io.on('connect', socket => {
     if (players[0].data.ready && players[1].data.ready) {
       io.emit('start attack');
 
-      randomPlayerStarts(io);
+      if (whoseTurn === 'random') {
+        randomPlayerStarts(io);
+      } else if (whoseTurn === 'p1') {
+        players[0].data.turnToShoot = true;
+        io.emit('turn', 1);
+      } else if (whoseTurn === 'p2') {
+        players[1].data.turnToShoot = true;
+        io.emit('turn', 2);
+      }
     }
     io.emit('log move', {
       player: 'game',
@@ -242,7 +253,7 @@ io.on('connect', socket => {
         io.emit('log move', {
           player: socket.data.player,
           name: socket.data.name,
-          message: `shot ${cell[3] + cell[4]}! HIT!`
+          message: `shot at ${cell[3] + cell[4]}! HIT!`
         });
 
         if (socket.data.targetsHit === socket.data.targets) {
@@ -266,7 +277,7 @@ io.on('connect', socket => {
         io.emit('log move', {
           player: socket.data.player,
           name: socket.data.name,
-          message: `shot ${cell[3] + cell[4]}! MISS :(`
+          message: `shot at ${cell[3] + cell[4]}! MISS :(`
         });
 
         if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
@@ -294,7 +305,7 @@ io.on('connect', socket => {
         io.emit('log move', {
           player: socket.data.player,
           name: socket.data.name,
-          message: `shot ${cell[3] + cell[4]}! HIT!`
+          message: `shot at ${cell[3] + cell[4]}! HIT!`
         });
 
         if (socket.data.targetsHit === socket.data.targets) {
@@ -318,7 +329,7 @@ io.on('connect', socket => {
         io.emit('log move', {
           player: socket.data.player,
           name: socket.data.name,
-          message: `shot ${cell[3] + cell[4]}! MISS :(`
+          message: `shot at ${cell[3] + cell[4]}! MISS :(`
         });
 
         if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {

@@ -355,6 +355,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   display: none;
+  display: flex;
   flex-direction: column;
   color: white;
   justify-content: center;
@@ -370,6 +371,27 @@ body {
     #settings {
       border: none;
       margin-bottom: 10px;
+    }
+    .close-settings {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      top: 10px;
+      right: 10px;
+      border: none;
+      cursor: pointer;
+      margin: 0;
+      padding: 3px;
+      border-radius: 4px;
+      background-color: rgb(207, 39, 39);
+      ion-icon {
+        width: 20px;
+        height: 20px;
+        color: white;
+        font-weight: 400;
+      }
     }
     & > * {
       display: flex;
@@ -403,6 +425,36 @@ body {
             &:hover {
               cursor: pointer;
               background-color: $hover-dark-blue;
+            }
+          }
+        }
+      }
+    }
+    .first-shot-settings {
+      h4 {
+        font-weight: 400;
+        margin-bottom: 10px;
+      }
+      .first-shot-buttons {
+        display: flex;
+        label {
+          font-size: 17px;
+          line-height: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          input {
+            box-sizing: border-box;
+            appearance: none;
+            background: white;
+            outline: none;
+            border: 3px solid white;
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            &:checked {
+              background: $dark-blue;
             }
           }
         }

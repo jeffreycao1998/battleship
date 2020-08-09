@@ -155,13 +155,19 @@ const addButtonEventHandlers = () => {
     const newShipSettings = getHowManyOfEachShip();
     const shotsPerTurn = Number($('.shots-per-turn-nums-num').text());
     const boardSize = Number($('.board-size-nums-num').text());
+    const firstShot = $("input[name='first-shot']:checked").val();
 
     const newSettings = {
       shotsPerTurn,
       boardSize,
       shipsNotPlaced: newShipSettings,
+      firstShot,
     }
     socket.emit('apply settings', newSettings);
+  });
+
+  $('.close-settings').on('click', () => {
+    $('#settings-screen').css('display', 'none');
   });
 
   addEventListenerForSettings('shots-per-turn');
