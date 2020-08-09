@@ -10,6 +10,11 @@ socket.on('update view', data => {
   colorCurrentShip(data);
 });
 
+socket.on('log move', ({player, name, message}) => {
+  console.log(message);
+  addTextToLog(message, player, name);
+});
+
 socket.on('update current ship', data => {
   colorCurrentShip(data);
   unColorPlacedShip(data);
@@ -23,6 +28,10 @@ socket.on('place ship', data => {
   colorCurrentShip(data);
   unColorPlacedShip(data);
   allowPlayerToPlaceShips(data);
+});
+
+socket.on('turn', player => {
+  changeTurn(player);
 });
 
 socket.on('clear board', () => {

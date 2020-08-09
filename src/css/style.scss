@@ -136,7 +136,7 @@ body {
         overflow: auto;
         .name-container {
           width: 100%;
-          text-align: center;
+          text-align: left;
           padding: 10px;
           .name {
             font-family: arial;
@@ -217,9 +217,42 @@ body {
     .log {
       min-width: 350px;
       max-width: 350px;
-      height: 85%;
+      height: 800px;
       background-color: white;
       border-radius: 4px;
+      padding: 15px 20px;
+      overflow: auto;
+      border: 1px solid $dark-blue;
+      display: flex;
+      align-items: flex-end;
+      .log-container {
+        overflow-y: auto;
+        width: 310px;
+        max-height: 760px;
+        & > * {
+          margin-top: 5px;
+          padding: 6px 10px;
+          border-radius: 2px;
+          font-size: 16px;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+        .p1 {
+          color: red;
+          background-color: rgb(255, 224, 224);
+        }
+        .p2 {
+          color: blue;
+          background-color: rgb(223, 223, 250);
+        }
+        .pgame {
+          color: black;
+          background-color: rgb(235, 235, 235);
+        }
+        .pwon {
+          color: purple;
+          background-color: rgb(236, 162, 236);
+        }
+      }
     }
     .btns-container {
       width: 350px;
@@ -242,9 +275,6 @@ body {
           transform: translateY(2px);
         }
       }
-      // .concede {
-
-      // }
       .settings {
         margin-left: 10px;
       }

@@ -5,6 +5,25 @@ const makeFullscreen = () => {
   // });
 }
 
+const changeTurn = (player) => {
+  const nameP1 = $('#name-p1').text().replace(' (TURN)', '');
+  const nameP2 = $('#name-p2').text().replace(' (TURN)', '');
+
+  if (player == 1) {
+    $('#name-p1').text(nameP1 + ' (TURN)');
+    $('#name-p2').text(nameP2);
+  } else {
+    $('#name-p2').text(nameP2 + ' (TURN)');
+    $('#name-p1').text(nameP1);
+  }
+};
+
+const addTextToLog = (message, player, name) => {
+  const previousLog = $('.log-container').html();
+  $('.log-container').html(previousLog + `<p class="p${player}">${name.toUpperCase()} ${message}</p>`);
+  $('.log-container').scrollTop($('.log-container').height())
+};
+
 const updatePlayerName = ({player, name}) => {
   if (!name) {
     $(`#name-p${player}`).text('Waiting for player...');
@@ -37,19 +56,19 @@ const addEventListenerForSettings = (property) => {
   let max;
 
   if (property === 'shots-per-turn') {
-    max = 10;
+    max = 100;
   } else if (property === 'board-size') {
-    max = 15;
+    max = 26;
   } else if (property === 'carrier') {
-    max = 3;
+    max = 5;
   } else if (property === 'battleship') {
-    max = 3;
+    max = 5;
   } else if (property === 'cruiser') {
-    max = 3;
+    max = 5;
   } else if (property === 'submarine') {
-    max = 3;
+    max = 5;
   } else if (property === 'destroyer') {
-    max = 3;
+    max = 5;
   }
 
   $(`.${property}-nums-dec`).on('click', () => {
@@ -97,6 +116,10 @@ const getHowManyOfEachShip = () => {
 
 // button event handlers
 const addButtonEventHandlers = () => {
+  $('.concede').on('click', () => {
+    socket.emit('concede');
+  });
+
   $('#btn-friend').on('click', () => {
     const inputAlias = $('#input-alias').val();
   
