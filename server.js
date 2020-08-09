@@ -1,5 +1,11 @@
 const io = require('socket.io')(8000);
 
+const randomPlayerStarts = () => {
+  const randNum = Math.round(Math.random());
+
+  players[randNum].data.turnToShoot = true;
+};
+
 const setNumOfTargets = (socket) => {
   socket.data.targets = 0;
   socket.data.shipsNotPlaced.forEach( ship => {
@@ -35,6 +41,8 @@ const setInitialData = (socket, name, player) => {
     ready: false,
     targets: 0,
     targetsHit: 0,
+    turnToShoot: false,
+    shotsTaken: 0,
   }
   setNumOfTargets(socket);
 }
@@ -47,6 +55,12 @@ const incrementCurrentShip = (socket, players, player) => {
   socket.data.currentShip += 1;
   io.emit('update current ship', socket.data);
   io.to(players[player - 1].id).emit('place ship', socket.data);
+}
+
+const changePlayerTurn = (socket) => {
+  players[0].data.turnToShoot = !players[0].data.turnToShoot;
+  players[1].data.turnToShoot = !players[1].data.turnToShoot;
+  socket.data.shotsTaken = 0;
 }
 
 const players = [];
@@ -70,6 +84,8 @@ io.on('connect', socket => {
       io.emit('update view', socket.data);
       io.emit('update view', players[0].data);
 
+      randomPlayerStarts();
+
       io.to(players[0].id).emit('players place ships',  players[0].data);
       io.to(players[1].id).emit('players place ships', players[1].data);
     }
@@ -79,37 +95,51 @@ io.on('connect', socket => {
     if (!players[1]) {
       return;
     }
-
+    
+    // new settings
     players[0].data.boardSize = boardSize;
     players[0].data.shotsPerTurn = shotsPerTurn;
     players[0].data.shipsNotPlaced = shipsNotPlaced;
-    players[0].data.targetsHit = 0;
-    players[0].data.currentShip = 1;
-    players[0].data.shipCoordinates.p1 = {};
-
+    
     players[1].data.boardSize = boardSize;
     players[1].data.shotsPerTurn = shotsPerTurn;
     players[1].data.shipsNotPlaced = shipsNotPlaced;
+
+    // reset to default
+    players[0].data.targetsHit = 0;
+    players[0].data.currentShip = 1;
+    players[0].data.turnToShoot = false;
+    players[0].data.shotsTaken = 0;
+    shipCoordinates.p1 = {};
+
     players[1].data.targetsHit = 0;
     players[1].data.currentShip = 1;
-    players[1].data.shipCoordinates.p2 = {};
+    players[1].data.turnToShoot = false;
+    players[1].data.shotsTaken = 0;
+    shipCoordinates.p2 = {};
 
     setNumOfTargets(players[0]);
     setNumOfTargets(players[1]);
 
     io.emit('update view', players[0].data);
     io.emit('update view', players[1].data);
+
+    randomPlayerStarts();
     
     io.to(players[0].id).emit('players place ships',  players[0].data);
     io.to(players[1].id).emit('players place ships', players[1].data);
   });
 
   socket.on('rematch', name => {
-    players[0].data.currentShip = 1;
-    players[1].data.currentShip = 1;
-
     players[0].data.targetsHit = 0;
+    players[0].data.currentShip = 1;
+    players[0].data.turnToShoot = false;
+    players[0].data.shotsTaken = 0;
+
     players[1].data.targetsHit = 0;
+    players[1].data.currentShip = 1;
+    players[1].data.turnToShoot = false;
+    players[1].data.shotsTaken = 0;
 
     io.emit('update view', players[0].data);
     io.emit('update view', players[1].data);
@@ -120,6 +150,8 @@ io.on('connect', socket => {
     if (socket.data.player == 2) {
       shipCoordinates.p2 = {reset: true};
     }
+
+    randomPlayerStarts();
 
     if (shipCoordinates.p1.reset && shipCoordinates.p2.reset) {
       io.to(players[0].id).emit('players place ships',  players[0].data);
@@ -161,7 +193,6 @@ io.on('connect', socket => {
 
   socket.on('player ready', data => {
     socket.data.ready = true;
-    console.log('player', socket.data.player, 'ready')
     if (players[0].data.ready && players[1].data.ready) {
       io.emit('start attack');
     }
@@ -171,11 +202,24 @@ io.on('connect', socket => {
     const boardClicked = cell[1];
     const player = socket.data.player;
 
+    console.log('player1: ', players[0].data.turnToShoot);
+    console.log('player2: ', players[1].data.turnToShoot);
     if (boardClicked == 1 && player == 2) {
+      if (!socket.data.turnToShoot) {
+        return;
+      }
+      socket.data.shotsTaken += 1;
+
       if (shipCoordinates.p1.hasOwnProperty(cell)) {
         const ship = shipCoordinates.p1[cell];
         socket.data.targetsHit += 1;
         io.emit('hit ship', { ship, cell });
+
+        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
+          changePlayerTurn(socket);
+          return;
+        }
+
         if (socket.data.targetsHit === socket.data.targets) {
           players[0].data.shipCoordinates.p1 = {ready: false};
           players[1].data.shipCoordinates.p2 = {ready: false};
@@ -183,13 +227,35 @@ io.on('connect', socket => {
         }
       } else {
         io.emit('miss ship', cell);
+
+        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
+          changePlayerTurn(socket);
+          return;
+        }
       }
     }
     if (boardClicked == 2 && player == 1) {
+      if (!socket.data.turnToShoot) {
+        return;
+      }
+      if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
+        players[0].data.turnToShoot = !players[0].data.turnToShoot;
+        players[1].data.turnToShoot = !players[1].data.turnToShoot;
+        socket.data.shotsTaken = 0;
+        return;
+      }
+      socket.data.shotsTaken += 1;
+
       if (shipCoordinates.p2.hasOwnProperty(cell)) {
         const ship = shipCoordinates.p2[cell];
         socket.data.targetsHit += 1;
         io.emit('hit ship', { ship, cell });
+
+        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
+          changePlayerTurn(socket);
+          return;
+        }
+
         if (socket.data.targetsHit === socket.data.targets) {
           players[0].data.shipCoordinates.p1 = {ready: false};
           players[1].data.shipCoordinates.p2 = {ready: false};
@@ -197,6 +263,11 @@ io.on('connect', socket => {
         }
       } else {
         io.emit('miss ship', cell);
+
+        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
+          changePlayerTurn(socket);
+          return;
+        }
       }
     }
   });
