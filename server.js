@@ -215,15 +215,15 @@ io.on('connect', socket => {
         socket.data.targetsHit += 1;
         io.emit('hit ship', { ship, cell });
 
-        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket);
-          return;
-        }
-
         if (socket.data.targetsHit === socket.data.targets) {
           players[0].data.shipCoordinates.p1 = {ready: false};
           players[1].data.shipCoordinates.p2 = {ready: false};
           io.emit('won game', socket.data.name);
+        }
+
+        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
+          changePlayerTurn(socket);
+          return;
         }
       } else {
         io.emit('miss ship', cell);
@@ -251,15 +251,15 @@ io.on('connect', socket => {
         socket.data.targetsHit += 1;
         io.emit('hit ship', { ship, cell });
 
-        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket);
-          return;
-        }
-
         if (socket.data.targetsHit === socket.data.targets) {
           players[0].data.shipCoordinates.p1 = {ready: false};
           players[1].data.shipCoordinates.p2 = {ready: false};
           io.emit('won game', socket.data.name);
+        }
+
+        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
+          changePlayerTurn(socket);
+          return;
         }
       } else {
         io.emit('miss ship', cell);
