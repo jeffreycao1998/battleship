@@ -94,16 +94,77 @@
     </div>
   </section>
 
-  <!-- <section id="winning-screen">
-    <div class="winning-container-background">
-      <div class="winning-container">
-        <img class="gif-left" src="./src/images/giphy.gif" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen>
-        <h1 class="winning-text rainbow-text">MEETBEATER24 WON!</h1>
-        <img class="gif-right" src="./src/images/giphy.gif" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen>
+  <section id="settings-screen">
+    <div class="settings-container">
+      <h1 id="settings">Settings</h1>
+      <div class="reg-settings">
+        <div class="shots-per-turn">
+          <div>Shots/Turn</div>
+          <div class="modify">
+            <button class="shots-per-turn-nums-dec">-</button>
+            <p class="shots-per-turn-nums-num">1</p>
+            <button class="shots-per-turn-nums-inc">+</button>
+          </div>
+        </div>
+        <div class="board-size">
+          <div>Board Size</div>
+          <div class="modify">
+            <button class="board-size-nums-dec">-</button>
+            <p class="board-size-nums-num">1</p>
+            <button class="board-size-nums-inc">+</button>
+          </div>
+        </div>
       </div>
-      <button id="rematch">Rematch</button>
+
+      <div class="ship-settings">
+        <div class="carrier-nums">
+          <div>Carriers (5)</div>
+          <div class="modify">
+            <button class="carrier-nums-dec">-</button>
+            <p class="carrier-nums-num">1</p>
+            <button class="carrier-nums-inc">+</button>
+          </div>
+        </div>
+
+        <div class="battleship-nums">
+          <div>Battleship (4)</div>
+          <div class="modify">
+            <button class="battleship-nums-dec">-</button>
+            <p class="battleship-nums-num">1</p>
+            <button class="battleship-nums-inc">+</button>
+          </div>
+        </div>
+
+        <div class="cruiser-nums">
+          <div>Cruiser (3)</div>
+          <div class="modify">
+            <button class="cruiser-nums-dec">-</button>
+            <p class="cruiser-nums-num">1</p>
+            <button class="cruiser-nums-inc">+</button>
+          </div>
+        </div>
+
+        <div class="submarine-nums">
+          <div>Submarine (3)</div>
+          <div class="modify">
+            <button class="submarine-nums-dec">-</button>
+            <p class="submarine-nums-num">1</p>
+            <button class="submarine-nums-inc">+</button>
+          </div>
+        </div>
+
+        <div class="destroyer-nums">
+          <div>Destroyer (2)</div>
+          <div class="modify">
+            <button class="destroyer-nums-dec">-</button>
+            <p class="destroyer-nums-num">1</p>
+            <button class="destroyer-nums-inc">+</button>
+          </div>
+        </div>
+      </div>
+      <button id="apply-settings">Apply</button>
     </div>
-  </section> -->
+  </section>
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="http://localhost:8000/socket.io/socket.io.js"></script>

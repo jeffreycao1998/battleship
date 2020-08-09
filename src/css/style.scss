@@ -312,3 +312,82 @@ body {
     }
   }
 }
+
+/*************************/
+/*****SETTINGS SCREEN*****/
+/*************************/
+#settings-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  flex-direction: column;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  .settings-container {
+    width: 400px;
+    max-height: 1200px;
+    background-color: rgb(61, 61, 61);
+    font-size: 20px;
+    border-radius: 4px;
+    padding: 15px;
+    #settings {
+      border: none;
+      margin-bottom: 10px;
+    }
+    & > * {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid black;
+      padding: 5px 15px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      & > * {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .modify {
+          display: flex;
+          margin: 10px 0;
+          p {
+            line-height: 100%;
+            vertical-align: middle;
+            margin: auto 20px;
+          }
+          button {
+            background-color: $dark-blue;
+            color: white;
+            width: 30px;
+            height: 20px;
+            padding-bottom: 10px;
+            outline: none;
+            border: none;
+            border-radius: 2px;
+            font-size: 20px;
+            &:hover {
+              cursor: pointer;
+              background-color: $hover-dark-blue;
+            }
+          }
+        }
+      }
+    }
+    #apply-settings {
+      background-color: $dark-blue;
+        color: white;
+        padding: 10px 30px;
+        outline: none;
+        border: none;
+        border-radius: 2px;
+        font-size: 20px;
+        margin: auto auto;
+        &:hover {
+          cursor: pointer;
+          background-color: $hover-dark-blue;
+        }
+    }
+  }
+}

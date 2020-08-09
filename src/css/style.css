@@ -422,4 +422,114 @@ body {
   -webkit-transform: translateY(2px);
           transform: translateY(2px);
 }
+
+/*************************/
+/*****SETTINGS SCREEN*****/
+/*************************/
+#settings-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  display: none;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  color: white;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#settings-screen .settings-container {
+  width: 400px;
+  max-height: 1200px;
+  background-color: #3d3d3d;
+  font-size: 20px;
+  border-radius: 4px;
+  padding: 15px;
+}
+
+#settings-screen .settings-container #settings {
+  border: none;
+  margin-bottom: 10px;
+}
+
+#settings-screen .settings-container > * {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  border: 1px solid black;
+  padding: 5px 15px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+#settings-screen .settings-container > * > * {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#settings-screen .settings-container > * > * .modify {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 10px 0;
+}
+
+#settings-screen .settings-container > * > * .modify p {
+  line-height: 100%;
+  vertical-align: middle;
+  margin: auto 20px;
+}
+
+#settings-screen .settings-container > * > * .modify button {
+  background-color: #4444ac;
+  color: white;
+  width: 30px;
+  height: 20px;
+  padding-bottom: 10px;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+  font-size: 20px;
+}
+
+#settings-screen .settings-container > * > * .modify button:hover {
+  cursor: pointer;
+  background-color: #3a3a92;
+}
+
+#settings-screen .settings-container #apply-settings {
+  background-color: #4444ac;
+  color: white;
+  padding: 10px 30px;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+  font-size: 20px;
+  margin: auto auto;
+}
+
+#settings-screen .settings-container #apply-settings:hover {
+  cursor: pointer;
+  background-color: #3a3a92;
+}
 /*# sourceMappingURL=style.css.map */

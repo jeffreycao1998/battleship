@@ -28,6 +28,49 @@ const showWinScreen = (player) => {
   $('.winning-text').text(`${player.toUpperCase()} WON!`)
 };
 
+const addEventListenerForSettings = (property) => {
+  $(`.${property}-nums-dec`).on('click', () => {
+    let num = $(`.${property}-nums-num`).text();
+    console.log(num)
+    if (num > 0) {
+      $(`.${property}-nums-num`).text(`${Number(num) - 1}`)
+    }
+  });
+
+  $(`.${property}-nums-inc`).on('click', () => {
+    let num = $(`.${property}-nums-num`).text();
+    console.log(num)
+    if (num < 10) {  // 3 is max amount of that ship
+      $(`.${property}-nums-num`).text(`${Number(num) + 1}`)
+    }
+  });
+};
+
+const getHowManyOfEachShip = () => {
+  const result = [];
+  const numCarriers = Number($('.carrier-nums-num').text());
+  const numBattleships = Number($('.battleship-nums-num').text());
+  const numCruisers = Number($('.cruiser-nums-num').text());
+  const numSubmarines = Number($('.submarine-nums-num').text());
+  const numDestroyers = Number($('.destroyer-nums-num').text());
+
+  for (let i = 0; i < numCarriers; i++) {
+    result.push('carrier');
+  }
+  for (let i = 0; i < numBattleships; i++) {
+    result.push('battleship');
+  }
+  for (let i = 0; i < numCruisers; i++) {
+    result.push('cruiser');
+  }
+  for (let i = 0; i < numSubmarines; i++) {
+    result.push('submarine');
+  }
+  for (let i = 0; i < numDestroyers; i++) {
+    result.push('destroyer');
+  }
+  return result;
+};
 
 // button event handlers
 const addButtonEventHandlers = () => {
@@ -41,7 +84,7 @@ const addButtonEventHandlers = () => {
     makeFullscreen()
   });
   
-  $('#btn-computer').on('click',() => {
+  $('#btn-computer').on('click', () => {
     makeFullscreen();
   });
 
@@ -54,4 +97,32 @@ const addButtonEventHandlers = () => {
 
     socket.emit('rematch');
   });
+
+  //--- SETTINGS STUFF ---//
+  $('.settings').on('click', () => {
+    $('#settings-screen').css('display', 'flex');
+  });
+
+  $('#apply-settings').on('click', () => {
+    $('#settings-screen').css('display', 'none');
+
+    const newShipSettings = getHowManyOfEachShip();
+    const shotsPerTurn = Number($('.shots-per-turn-nums-num').text());
+    const boardSize = Number($('.board-size-nums-num').text());
+
+    const newSettings = {
+      shotsPerTurn,
+      boardSize,
+      shipsNotPlaced: newShipSettings,
+    }
+    socket.emit('apply settings', newSettings);
+  });
+
+  addEventListenerForSettings('shots-per-turn');
+  addEventListenerForSettings('board-size');
+  addEventListenerForSettings('carrier');
+  addEventListenerForSettings('battleship');
+  addEventListenerForSettings('cruiser');
+  addEventListenerForSettings('submarine');
+  addEventListenerForSettings('destroyer');
 };
