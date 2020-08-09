@@ -29,10 +29,33 @@ const showWinScreen = (player) => {
 };
 
 const addEventListenerForSettings = (property) => {
+  const numCarriers = Number($('.carrier-nums-num').text());
+  const numBattleships = Number($('.battleship-nums-num').text());
+  const numCruisers = Number($('.cruiser-nums-num').text());
+  const numSubmarines = Number($('.submarine-nums-num').text());
+  const numDestroyers = Number($('.destroyer-nums-num').text());
+  let max;
+
+  if (property === 'shots-per-turn') {
+    max = 10;
+  } else if (property === 'board-size') {
+    max = 15;
+  } else if (property === 'carrier') {
+    max = 3;
+  } else if (property === 'battleship') {
+    max = 3;
+  } else if (property === 'cruiser') {
+    max = 3;
+  } else if (property === 'submarine') {
+    max = 3;
+  } else if (property === 'destroyer') {
+    max = 3;
+  }
+
   $(`.${property}-nums-dec`).on('click', () => {
     let num = $(`.${property}-nums-num`).text();
     console.log(num)
-    if (num > 0) {
+    if (num > max) {
       $(`.${property}-nums-num`).text(`${Number(num) - 1}`)
     }
   });
@@ -40,7 +63,7 @@ const addEventListenerForSettings = (property) => {
   $(`.${property}-nums-inc`).on('click', () => {
     let num = $(`.${property}-nums-num`).text();
     console.log(num)
-    if (num < 10) {  // 3 is max amount of that ship
+    if (num < max) {  // 3 is max amount of that ship
       $(`.${property}-nums-num`).text(`${Number(num) + 1}`)
     }
   });

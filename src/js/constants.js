@@ -1,5 +1,5 @@
 const letters = [
-  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'
 ];
 
 const colorRoyalBlue = 'rgb(68, 68, 172)';

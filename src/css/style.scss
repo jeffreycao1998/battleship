@@ -133,6 +133,7 @@ body {
         width: 400px;
         height: 100%;
         border-right: 1px solid $dark-blue;
+        overflow: auto;
         .name-container {
           width: 100%;
           text-align: center;
@@ -164,11 +165,14 @@ body {
         width: 800px;
         height: 100%;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        overflow: auto;
+        justify-content: flex-start;
+        align-items: flex-start;
         .board {
           position: relative;
           border: 1px solid $dark-blue;
+          margin-top: 50px;
+          margin-left: 50px;
           .identifier-row {
             position: absolute;
             left: -40px;
