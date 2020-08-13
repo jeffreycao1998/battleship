@@ -1,3 +1,22 @@
+// randomly chooses which player starts
+const randomPlayerStarts = (io, players) => {
+  const randNum = Math.round(Math.random());
+
+  players[randNum].data.turnToShoot = true;
+
+  io.emit('turn', randNum + 1);
+};
+
+// shooting all your shots makes it the other player's turn to shoot
+const changePlayerTurn = (socket) => {
+  players[0].data.turnToShoot = !players[0].data.turnToShoot;
+  players[1].data.turnToShoot = !players[1].data.turnToShoot;
+  socket.data.shotsTaken = 0;
+
+  io.emit('turn', players[0].data.turnToShoot ? 1 : 2);
+}
+
+// calculates total number of cells the battleships take up
 const setNumOfTargets = (socket) => {
   socket.data.targets = 0;
   socket.data.shipsNotPlaced.forEach( ship => {
@@ -40,8 +59,21 @@ const setInitialData = (socket, name, player) => {
   setNumOfTargets(socket);
 }
 
+const incrementCurrentShip = (io, socket, players, player) => {
+  if (players[0].data.currentShip > players[0].data.currentShip && players[1].data.currentShip > players[1].data.currentShip) {
+    io.emit('start attack');
+  }
+  
+  socket.data.currentShip += 1;
+  io.emit('update current ship', socket.data);
+  io.to(players[player - 1].id).emit('place ship', socket.data);
+}
+
 
 module.exports = {
   setNumOfTargets,
   setInitialData,
+  incrementCurrentShip,
+  randomPlayerStarts,
+  changePlayerTurn,
 }

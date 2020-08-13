@@ -1,34 +1,12 @@
 const io = require('socket.io')(8000);
 const { 
   setNumOfTargets,
-  setInitialData
+  setInitialData,
+  incrementCurrentShip,
+  randomPlayerStarts,
+  changePlayerTurn,
 } = require('./src/helperFunctions');
 
-const randomPlayerStarts = (io) => {
-  const randNum = Math.round(Math.random());
-
-  players[randNum].data.turnToShoot = true;
-
-  io.emit('turn', randNum + 1);
-};
-
-const incrementCurrentShip = (socket, players, player) => {
-  if (players[0].data.currentShip > players[0].data.currentShip && players[1].data.currentShip > players[1].data.currentShip) {
-    io.emit('start attack');
-  }
-  
-  socket.data.currentShip += 1;
-  io.emit('update current ship', socket.data);
-  io.to(players[player - 1].id).emit('place ship', socket.data);
-}
-
-const changePlayerTurn = (socket) => {
-  players[0].data.turnToShoot = !players[0].data.turnToShoot;
-  players[1].data.turnToShoot = !players[1].data.turnToShoot;
-  socket.data.shotsTaken = 0;
-
-  io.emit('turn', players[0].data.turnToShoot ? 1 : 2);
-}
 
 let whoseTurn = 'random';
 const players = [];
@@ -159,10 +137,10 @@ io.on('connect', socket => {
     const player = socket.data.player;
 
     if (player === 1 && boardClicked === 1) {
-      incrementCurrentShip(socket, players, player);
+      incrementCurrentShip(io, socket, players, player);
     }
     if (player === 2 && boardClicked === 2) {
-      incrementCurrentShip(socket, players, player);
+      incrementCurrentShip(io, socket, players, player);
     }
   });
 
@@ -181,7 +159,7 @@ io.on('connect', socket => {
       io.emit('start attack');
 
       if (whoseTurn === 'random') {
-        randomPlayerStarts(io);
+        randomPlayerStarts(io, players);
       } else if (whoseTurn === 'p1') {
         players[0].data.turnToShoot = true;
         io.emit('turn', 1);
@@ -230,7 +208,7 @@ io.on('connect', socket => {
         }
 
         if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket);
+          changePlayerTurn(socket, players);
           return;
         }
       } else {
@@ -242,7 +220,7 @@ io.on('connect', socket => {
         });
 
         if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket);
+          changePlayerTurn(socket, players);
           return;
         }
       }
@@ -282,7 +260,7 @@ io.on('connect', socket => {
         }
 
         if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket);
+          changePlayerTurn(socket, players);
           return;
         }
       } else {
@@ -294,7 +272,7 @@ io.on('connect', socket => {
         });
 
         if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket);
+          changePlayerTurn(socket, players);
           return;
         }
       }
