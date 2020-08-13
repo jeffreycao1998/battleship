@@ -1,4 +1,8 @@
 const io = require('socket.io')(8000);
+const { 
+  setNumOfTargets,
+  setInitialData
+} = require('./src/helperFunctions');
 
 const randomPlayerStarts = (io) => {
   const randNum = Math.round(Math.random());
@@ -8,47 +12,6 @@ const randomPlayerStarts = (io) => {
   io.emit('turn', randNum + 1);
 };
 
-const setNumOfTargets = (socket) => {
-  socket.data.targets = 0;
-  socket.data.shipsNotPlaced.forEach( ship => {
-    switch (ship) {
-      case 'carrier':
-        socket.data.targets += 5;
-        break;
-      case 'battleship':
-        socket.data.targets += 4;
-        break;
-      case 'cruiser':
-        socket.data.targets += 3;
-        break;
-      case 'submarine':
-        socket.data.targets += 3;
-        break;
-      case 'destroyer':
-        socket.data.targets += 2;
-        break;
-    }
-  })
-}
-
-const setInitialData = (socket, name, player) => {
-  socket.data = {
-    player,
-    name,
-    shipsNotPlaced: ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'],
-    currentShip: 1,
-    shipOrientation: 'horizontal',
-    boardSize: 10,
-    shotsPerTurn: 5,
-    ready: false,
-    targets: 0,
-    targetsHit: 0,
-    turnToShoot: false,
-    shotsTaken: 0,
-  }
-  setNumOfTargets(socket);
-}
-
 const incrementCurrentShip = (socket, players, player) => {
   if (players[0].data.currentShip > players[0].data.currentShip && players[1].data.currentShip > players[1].data.currentShip) {
     io.emit('start attack');
@@ -57,8 +20,6 @@ const incrementCurrentShip = (socket, players, player) => {
   socket.data.currentShip += 1;
   io.emit('update current ship', socket.data);
   io.to(players[player - 1].id).emit('place ship', socket.data);
-
-  
 }
 
 const changePlayerTurn = (socket) => {
