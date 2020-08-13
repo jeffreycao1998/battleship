@@ -148,6 +148,12 @@ const addButtonEventHandlers = () => {
   });
   
   $('#btn-computer').on('click', () => {
+    const inputAlias = $('#input-alias').val();
+
+    if (!inputAlias || inputAlias.length < 3 || inputAlias.length > 14) {
+      return $('.name-error-message').text('Stop! Name must be 3-14 characters in length')
+    }
+    socket.emit('play computer', inputAlias);
     makeFullscreen();
   });
 

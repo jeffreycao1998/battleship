@@ -38,6 +38,7 @@ const setInitialData = (socket, name, player) => {
     turnToShoot: false,
     shotsTaken: 0,
     left: false,
+    ai: false,
   }
   setNumOfTargets(socket);
 }

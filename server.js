@@ -5,12 +5,15 @@ const { setTurn, incrementCurrentShip } = require('./src/shipSetup');
 const { handleShot } = require('./src/handleShot');
 const { resetData, resetBoard } = require('./src/reset');
 
+const { setUpComputerBoard } = require('./src/computer');
+
 let whoseTurn = 'random';
 const players = [];
 const shipCoordinates = {
   p1: {},
   p2: {},
 }
+const computer = {};
 
 io.on('connect', socket => {
   
@@ -35,9 +38,26 @@ io.on('connect', socket => {
           resetBoard(io, players);
         }
       }
-      
-
     }
+
+    io.emit('log move', {
+      name,
+      player: 'game',
+      message: 'connected'
+    });
+  });
+
+  socket.on('play computer', name => {
+    players[0] = socket;
+    players[1] = computer;
+
+    setInitialData(socket, name, 1);
+    setInitialData(computer, 'Deep Blue', 2);
+    resetData(players, shipCoordinates);
+    resetBoard(io, players);
+
+    shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
+    players[1].data.ready = true;
 
     io.emit('log move', {
       name,
@@ -133,6 +153,7 @@ io.on('connect', socket => {
     const readyP1 = players[0].data.ready;
     const readyP2 = players[1].data.ready
 
+    console.log(shipCoordinates.p1);
     if (readyP1 && readyP2) {
       setTurn(whoseTurn, io, players);
       io.emit('start attack');
