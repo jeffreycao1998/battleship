@@ -53,7 +53,24 @@ const addEventListenerForSettings = (property) => {
   const numCruisers = Number($('.cruiser-nums-num').text());
   const numSubmarines = Number($('.submarine-nums-num').text());
   const numDestroyers = Number($('.destroyer-nums-num').text());
+  let min;
   let max;
+
+  if (property === 'shots-per-turn') {
+    min = 1;
+  } else if (property === 'board-size') {
+    min = 2;
+  } else if (property === 'carrier') {
+    min = 0;
+  } else if (property === 'battleship') {
+    min = 0;
+  } else if (property === 'cruiser') {
+    min = 0;
+  } else if (property === 'submarine') {
+    min = 0;
+  } else if (property === 'destroyer') {
+    min = 0;
+  }
 
   if (property === 'shots-per-turn') {
     max = 100;
@@ -74,7 +91,7 @@ const addEventListenerForSettings = (property) => {
   $(`.${property}-nums-dec`).on('click', () => {
     let num = $(`.${property}-nums-num`).text();
     console.log(num)
-    if (num > max) {
+    if (num > min) {
       $(`.${property}-nums-num`).text(`${Number(num) - 1}`)
     }
   });
@@ -126,7 +143,7 @@ const addButtonEventHandlers = () => {
     if (!inputAlias || inputAlias.length < 3 || inputAlias.length > 14) {
       return $('.name-error-message').text('Stop! Name must be 3-14 characters in length')
     }
-    socket.emit('name', inputAlias);
+    socket.emit('play friend', inputAlias);
     makeFullscreen()
   });
   
@@ -160,10 +177,9 @@ const addButtonEventHandlers = () => {
     const newSettings = {
       shotsPerTurn,
       boardSize,
-      shipsNotPlaced: newShipSettings,
-      firstShot,
+      shipsNotPlaced: [...newShipSettings],
     }
-    socket.emit('apply settings', newSettings);
+    socket.emit('apply settings', {firstShot, newSettings});
   });
 
   $('.close-settings').on('click', () => {

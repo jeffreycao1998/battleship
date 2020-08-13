@@ -1,12 +1,9 @@
 const io = require('socket.io')(8000);
-const { 
-  setNumOfTargets,
-  setInitialData,
-  incrementCurrentShip,
-  randomPlayerStarts,
-  changePlayerTurn,
-} = require('./src/helperFunctions');
 
+const { setNumOfTargets, setInitialData, changeSettings } = require('./src/settingsSetup');
+const { setTurn, incrementCurrentShip } = require('./src/shipSetup');
+const { handleShot } = require('./src/handleShot');
+const { resetData, resetBoard } = require('./src/reset');
 
 let whoseTurn = 'random';
 const players = [];
@@ -16,75 +13,61 @@ const shipCoordinates = {
 }
 
 io.on('connect', socket => {
-
-  socket.on('name', name => {
+  
+  socket.on('play friend', name => {
     if (players.length === 0) {
+      players.push(socket);
       setInitialData(socket, name, 1);
-      players.push(socket);
-
       io.emit('update view', socket.data);
-      io.emit('log move', {
-        player: 'game',
-        name: socket.data.name,
-        message: 'connected'
-      });
+
     } else if (players.length === 1) {
-      setInitialData(socket, name, 2);
       players.push(socket);
+      setInitialData(socket, name, 2);
+      resetBoard(io, players);
 
-      io.emit('update view', socket.data);
-      io.emit('update view', players[0].data);
+    } else {
+      // check for any previous players that disconnected
+      for (let i = 0; i < players.length; i++) {
+        if (players[i].data.left) {
+          players[i] = socket;
+          setInitialData(socket, name, i + 1);
+          resetData(players, shipCoordinates);
+          resetBoard(io, players);
+        }
+      }
+      
 
-      io.to(players[0].id).emit('players place ships', players[0].data);
-      io.to(players[1].id).emit('players place ships', players[1].data);
-
-      io.emit('log move', {
-        player: 'game',
-        name: socket.data.name,
-        message: 'connected'
-      });
     }
+
+    io.emit('log move', {
+      name,
+      player: 'game',
+      message: 'connected'
+    });
   });
 
-  socket.on('apply settings', ({ boardSize, shotsPerTurn, shipsNotPlaced, firstShot }) => {
+  socket.on('apply settings', ({ firstShot, newSettings }) => {
+    // prevents player from changing settings until both players in game
     if (!players[1]) {
+      io.emit('log move', {
+        name: socket.data.name,
+        player: 'game',
+        message: 'please wait for player 2 to join'
+      })
       return;
     }
     
-    // new settings
-    players[0].data.boardSize = boardSize;
-    players[0].data.shotsPerTurn = shotsPerTurn;
-    players[0].data.shipsNotPlaced = shipsNotPlaced;
-    
-    players[1].data.boardSize = boardSize;
-    players[1].data.shotsPerTurn = shotsPerTurn;
-    players[1].data.shipsNotPlaced = shipsNotPlaced;
+    // set new settings
+    changeSettings(players, newSettings);
+    whoseTurn = firstShot;
 
-    whoseTurn = firstShot;   // applys setting for who shoots first;
-
-    // reset to default
-    players[0].data.targetsHit = 0;
-    players[0].data.currentShip = 1;
-    players[0].data.turnToShoot = false;
-    players[0].data.shotsTaken = 0;
-    players[0].data.ready = false;
-    shipCoordinates.p1 = {};
-
-    players[1].data.targetsHit = 0;
-    players[1].data.currentShip = 1;
-    players[1].data.turnToShoot = false;
-    players[1].data.shotsTaken = 0;
-    players[1].data.ready = false;
-    shipCoordinates.p2 = {};
+    // reset players shot attemps/turns and stuff to default
+    resetData(players, shipCoordinates);
 
     setNumOfTargets(players[0]);
     setNumOfTargets(players[1]);
 
-    io.emit('update view', players[0].data);
-    io.emit('update view', players[1].data);
-    
-    io.to(players[0].id).emit('players place ships',  players[0].data);
-    io.to(players[1].id).emit('players place ships', players[1].data);
+    resetBoard(io, players);
 
     io.emit('log move', {
       player: 'game',
@@ -94,25 +77,9 @@ io.on('connect', socket => {
   });
 
   socket.on('rematch', name => {
-    players[0].data.targetsHit = 0;
-    players[0].data.currentShip = 1;
-    players[0].data.turnToShoot = false;
-    players[0].data.shotsTaken = 0;
-    players[0].data.ready = false;
-    shipCoordinates.p1 = {};
-
-    players[1].data.targetsHit = 0;
-    players[1].data.currentShip = 1;
-    players[1].data.turnToShoot = false;
-    players[1].data.shotsTaken = 0;
-    players[1].data.ready = false;
-    shipCoordinates.p1 = {};
-
-    io.emit('update view', players[0].data);
-    io.emit('update view', players[1].data);
-    
-    io.to(players[0].id).emit('players place ships', players[0].data);
-    io.to(players[1].id).emit('players place ships', players[1].data);
+    // reset players shot attemps/turns and stuff to default
+    resetData(players, shipCoordinates);
+    resetBoard(io, players);
 
     io.emit('log move', {
       player: 'game',
@@ -121,17 +88,21 @@ io.on('connect', socket => {
     });
   });
 
+  // rotates ship
   socket.on('rotate piece', () => {
     if (socket.data.shipOrientation === 'horizontal') {
       socket.data.shipOrientation = 'vertical';
     } else {
       socket.data.shipOrientation = 'horizontal';
     }
+
     io.to(players[0].id).emit('players place ships', players[0].data);
     io.to(players[1].id).emit('players place ships', players[1].data);
+
     io.emit('clear board');
   });
 
+  // changes the ship that is being placed
   socket.on('increment currentShip count', cell => {
     const boardClicked = Number(cell[1]);
     const player = socket.data.player;
@@ -144,30 +115,29 @@ io.on('connect', socket => {
     }
   });
 
+  // stores the coordinates of all ships placed on board
   socket.on('store coordinates', ({cell, ship}) => {
-    if (cell[1] == 1) {
+    const player = cell[1];
+
+    if (player == 1) {
       shipCoordinates.p1[cell] = ship;
     }
-    if (cell[1] == 2) {
+    if (player == 2) {
       shipCoordinates.p2[cell] = ship;
     }
   });
 
+  // indicates that the player is ready to battle
   socket.on('player ready', data => {
     socket.data.ready = true;
-    if (players[0].data.ready && players[1].data.ready) {
-      io.emit('start attack');
+    const readyP1 = players[0].data.ready;
+    const readyP2 = players[1].data.ready
 
-      if (whoseTurn === 'random') {
-        randomPlayerStarts(io, players);
-      } else if (whoseTurn === 'p1') {
-        players[0].data.turnToShoot = true;
-        io.emit('turn', 1);
-      } else if (whoseTurn === 'p2') {
-        players[1].data.turnToShoot = true;
-        io.emit('turn', 2);
-      }
+    if (readyP1 && readyP2) {
+      setTurn(whoseTurn, io, players);
+      io.emit('start attack');
     }
+
     io.emit('log move', {
       player: 'game',
       name: socket.data.name,
@@ -175,116 +145,28 @@ io.on('connect', socket => {
     });
   });
 
+  // returns logic for each shot whether its a hit/miss
   socket.on('shoot', cell => {
     const boardClicked = cell[1];
     const player = socket.data.player;
+    const turnToShoot = socket.data.turnToShoot;
 
-    if (boardClicked == 1 && player == 2) {
-      if (!socket.data.turnToShoot) {
-        return;
-      }
-      socket.data.shotsTaken += 1;
-
-      if (shipCoordinates.p1.hasOwnProperty(cell)) {
-        const ship = shipCoordinates.p1[cell];
-        socket.data.targetsHit += 1;
-        io.emit('hit ship', { ship, cell });
-        io.emit('log move', {
-          player: socket.data.player,
-          name: socket.data.name,
-          message: `shot at ${cell[3] + cell[4]}! HIT!`
-        });
-
-        if (socket.data.targetsHit === socket.data.targets) {
-          shipCoordinates.p1 = {ready: false};
-          shipCoordinates.p2 = {ready: false};
-          io.emit('won game', socket.data.name);
-          io.emit('log move', {
-            player: 'won',
-            name: socket.data.name,
-            message: 'won the game!??!?!?'
-          });
-          return;
-        }
-
-        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket, players);
-          return;
-        }
-      } else {
-        io.emit('miss ship', cell);
-        io.emit('log move', {
-          player: socket.data.player,
-          name: socket.data.name,
-          message: `shot at ${cell[3] + cell[4]}! MISS :(`
-        });
-
-        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket, players);
-          return;
-        }
-      }
+    if (!turnToShoot) {
+      return;
     }
+
+    // Player 1
     if (boardClicked == 2 && player == 1) {
-      if (!socket.data.turnToShoot) {
-        return;
-      }
-      if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-        players[0].data.turnToShoot = !players[0].data.turnToShoot;
-        players[1].data.turnToShoot = !players[1].data.turnToShoot;
-        socket.data.shotsTaken = 0;
-        return;
-      }
+      socket.data.shotsTaken += 1;
+      
+      handleShot(boardClicked, shipCoordinates, cell, io, socket, players);
+    }
+
+    // Player 2
+    if (boardClicked == 1 && player == 2) {
       socket.data.shotsTaken += 1;
 
-      if (shipCoordinates.p2.hasOwnProperty(cell)) {
-        const ship = shipCoordinates.p2[cell];
-        socket.data.targetsHit += 1;
-        io.emit('hit ship', { ship, cell });
-        io.emit('log move', {
-          player: socket.data.player,
-          name: socket.data.name,
-          message: `shot at ${cell[3] + cell[4]}! HIT!`
-        });
-
-        if (socket.data.targetsHit === socket.data.targets) {
-          shipCoordinates.p1 = {ready: false};
-          shipCoordinates.p2 = {ready: false};
-          io.emit('won game', socket.data.name);
-          io.emit('log move', {
-            player: 'won',
-            name: socket.data.name,
-            message: 'won the game!??!?!?'
-          });
-          return;
-        }
-
-        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket, players);
-          return;
-        }
-      } else {
-        io.emit('miss ship', cell);
-        io.emit('log move', {
-          player: socket.data.player,
-          name: socket.data.name,
-          message: `shot at ${cell[3] + cell[4]}! MISS :(`
-        });
-
-        if (socket.data.shotsTaken >= socket.data.shotsPerTurn) {
-          changePlayerTurn(socket, players);
-          return;
-        }
-      }
-    }
-  });
-
-  socket.on('disconnect', () => {
-    const i = players.indexOf(socket);
-    if (i && i.data) {
-      players.splice(i, 1);
-      socket.data.name = undefined;
-      io.emit('player disconnected', socket.data);
+      handleShot(boardClicked, shipCoordinates, cell, io, socket, players);
     }
   });
 
@@ -297,9 +179,24 @@ io.on('connect', socket => {
     });
   })
 
+  socket.on('disconnect', () => {
+    const i = players.indexOf(socket);
+    const player = players[i];
+
+    if (player && players[i].data) {
+      io.emit('won game', socket.data.player === 1 ? players[1].data.name : players[0].data.name);
+      io.emit('log move', {
+        player: 'game',
+        name: socket.data.name,
+        message: 'left the game...'
+      });
+    }
+    
+    if (socket.data) {
+      socket.data.left = true;
+      socket.data.name = undefined;
+      io.emit('player disconnected', socket.data);
+    }
+  });
+
 });
-
-
-const unlockButtons = (currentUser) => {
-
-}
