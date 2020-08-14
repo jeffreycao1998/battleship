@@ -101,7 +101,7 @@ const setUpComputerBoard = (io, { name, shipsNotPlaced, boardSize }) => {
   io.emit('log move', {
     player: 'game',
     name,
-    message: 'hurry up silly human, I have '
+    message: 'hurry up silly human, I have computer things to do!'
   });
   return shipCoordinates;
 };
