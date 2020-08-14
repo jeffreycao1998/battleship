@@ -109,9 +109,14 @@ const setUpComputerBoard = (io, { name, shipsNotPlaced, boardSize }) => {
   return shipCoordinates;
 };
 
-const computerAttack = ({boardSize}) => {
+const computerAttack = ({boardSize, cellsAttacked }) => {
   const { randX, randY } = genCoordinate(boardSize);
-  // console.log(letters[randY], randX);
+  const shot = `p1-${letters[randY]}${randX}`;
+  
+  if (cellsAttacked.hasOwnProperty(shot)) {
+    return computerAttack({boardSize, cellsAttacked});
+  }
+  cellsAttacked[shot] = true;
   return `p1-${letters[randY]}${randX}`;
 };
 

@@ -58,6 +58,7 @@ io.on('connect', socket => {
 
     shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
     players[1].data.ready = true;
+    players[1].data.cellsAttacked = {};
 
     io.emit('log move', {
       name,
@@ -92,6 +93,7 @@ io.on('connect', socket => {
     if (players[1].data.name === 'Deep Blue') {
       shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
       players[1].data.ready = true;
+      players[1].data.cellsAttacked = {};
     }
 
     io.emit('log move', {
@@ -109,6 +111,7 @@ io.on('connect', socket => {
     if (players[1].data.name === 'Deep Blue') {
       shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
       players[1].data.ready = true;
+      players[1].data.cellsAttacked = {};
     }
 
     io.emit('log move', {
