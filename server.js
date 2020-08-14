@@ -39,7 +39,7 @@ io.on('connect', socket => {
           resetData(players, shipCoordinates);
           resetBoard(io, players);
 
-        } else if (players[1].data.name === 'Deep Blue') {
+        } else if (players[1].data.ai) {
           console.log(players[1].data.name);
           players[1] = socket;
           setInitialData(socket, name, 2);
@@ -74,6 +74,7 @@ io.on('connect', socket => {
     shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
     players[1].data.ready = true;
     players[1].data.cellsAttacked = {};
+    players[1].data.ai = true;
   });
 
   socket.on('apply settings', ({ firstShot, newSettings }) => {
@@ -87,7 +88,16 @@ io.on('connect', socket => {
       return;
     }
 
-    if (players[1].data.name === 'Deep Blue') {
+    if (players[0].data.ready && players[1].data.ready) {
+      io.emit('log move', {
+        player: '2',
+        name: socket.data.name,
+        message: "you can't change the settings in the middle of a game!"
+      });
+      return;
+    }
+
+    if (players[1].data.ai) {
       // shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
       // players[1].data.ready = true;
       // players[1].data.cellsAttacked = {};
