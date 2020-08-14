@@ -90,7 +90,6 @@ const addEventListenerForSettings = (property) => {
 
   $(`.${property}-nums-dec`).on('click', () => {
     let num = $(`.${property}-nums-num`).text();
-    console.log(num)
     if (num > min) {
       $(`.${property}-nums-num`).text(`${Number(num) - 1}`)
     }
@@ -98,7 +97,6 @@ const addEventListenerForSettings = (property) => {
 
   $(`.${property}-nums-inc`).on('click', () => {
     let num = $(`.${property}-nums-num`).text();
-    console.log(num)
     if (num < max) {  // 3 is max amount of that ship
       $(`.${property}-nums-num`).text(`${Number(num) + 1}`)
     }
@@ -138,7 +136,7 @@ const addButtonEventHandlers = () => {
   });
 
   $('#btn-friend').on('click', () => {
-    const inputAlias = $('#input-alias').val();
+    const inputAlias = $('#input-alias').val().trim();
   
     if (!inputAlias || inputAlias.length < 3 || inputAlias.length > 14) {
       return $('.name-error-message').text('Stop! Name must be 3-14 characters in length')

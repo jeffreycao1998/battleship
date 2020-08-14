@@ -56,15 +56,15 @@ io.on('connect', socket => {
     resetData(players, shipCoordinates);
     resetBoard(io, players);
 
-    shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
-    players[1].data.ready = true;
-    players[1].data.cellsAttacked = {};
-
     io.emit('log move', {
       name,
       player: 'game',
       message: 'connected'
     });
+
+    shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
+    players[1].data.ready = true;
+    players[1].data.cellsAttacked = {};
   });
 
   socket.on('apply settings', ({ firstShot, newSettings }) => {
@@ -75,6 +75,19 @@ io.on('connect', socket => {
         player: 'game',
         message: 'please wait for player 2 to join'
       })
+      return;
+    }
+
+    if (players[1].data.name === 'Deep Blue') {
+      // shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
+      // players[1].data.ready = true;
+      // players[1].data.cellsAttacked = {};
+
+      io.emit('log move', {
+        player: '2',
+        name: 'Deep Blue',
+        message: `used UNO REVERSE!, couldn't change settings...`
+      });
       return;
     }
     
@@ -90,12 +103,6 @@ io.on('connect', socket => {
 
     resetBoard(io, players);
 
-    if (players[1].data.name === 'Deep Blue') {
-      shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
-      players[1].data.ready = true;
-      players[1].data.cellsAttacked = {};
-    }
-
     io.emit('log move', {
       player: 'game',
       name: socket.data.name,
@@ -108,17 +115,17 @@ io.on('connect', socket => {
     resetData(players, shipCoordinates);
     resetBoard(io, players);
 
-    if (players[1].data.name === 'Deep Blue') {
-      shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
-      players[1].data.ready = true;
-      players[1].data.cellsAttacked = {};
-    }
-
     io.emit('log move', {
       player: 'game',
       name: socket.data.name,
       message: `wants a rematch!`
     });
+
+    if (players[1].data.name === 'Deep Blue') {
+      shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
+      players[1].data.ready = true;
+      players[1].data.cellsAttacked = {};
+    }
   });
 
   // rotates ship
@@ -166,7 +173,6 @@ io.on('connect', socket => {
     const readyP1 = players[0].data.ready;
     const readyP2 = players[1].data.ready
 
-    console.log(shipCoordinates.p1);
     if (readyP1 && readyP2) {
       setTurn(whoseTurn, io, players);
       io.emit('start attack');
@@ -212,6 +218,9 @@ io.on('connect', socket => {
       for (let i = 0; i < players[1].data.shotsPerTurn; i++) {
         const cell = computerAttack(players[1].data);
         handleShot(1, shipCoordinates, cell, io, players[1], players);
+        if (players[1].data.targetsHit === players[1].data.targets) {
+          return;
+        }
       }
     };
   });

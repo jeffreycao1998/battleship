@@ -7,6 +7,8 @@ socket.on('update view', data => {
   updatePlayerName(data);
   createBoard(data);
   createShips(data);
+
+  if (data.name === 'Deep Blue') return;
   colorCurrentShip(data);
 });
 

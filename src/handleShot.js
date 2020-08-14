@@ -28,7 +28,6 @@ const emitShotHit = (io, socket, cell, ship) => {
 };
 
 const emitShotMissed = (io, socket, cell) => {
-  console.log(cell);
   io.emit('miss ship', cell);
   io.emit('log move', {
     player: socket.data.player,
@@ -55,9 +54,6 @@ const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players) =>
       shipCoordinates.p1 = {ready: false};
       shipCoordinates.p2 = {ready: false};
 
-      if (players[1].data.name === 'Deep Blue') {
-        shipCoordinates.p2 = {ready: true};
-      }
       emitEndGame(io, socket);
     }
 

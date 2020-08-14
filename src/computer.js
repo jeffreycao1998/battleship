@@ -42,12 +42,10 @@ const genCoordinate = (boardSize, ship, orientation, shipCoordinates) => {
   for (let i  = 0; i < shipLength; i++) {
     if (orientation === 0) {
       if (shipCoordinates[`p2-${letters[randY]}${randX + i}`]) {
-        console.log(shipCoordinates[`p2-${letters[randY]}${randX + i}`])
         return genCoordinate(boardSize, ship, orientation, shipCoordinates);
       }
     } else if (orientation === 1) {
       if (shipCoordinates[`p2-${letters[randY + i]}${randX}`]) {
-        console.log(shipCoordinates[`p2-${letters[randY + i]}${randX}`]);
         return genCoordinate(boardSize, ship, orientation, shipCoordinates);
       }
     }
@@ -103,9 +101,8 @@ const setUpComputerBoard = (io, { name, shipsNotPlaced, boardSize }) => {
   io.emit('log move', {
     player: 'game',
     name,
-    message: 'finished placing ships, hurry up human!'
+    message: 'hurry up silly human, I have '
   });
-  console.log(shipCoordinates);
   return shipCoordinates;
 };
 
