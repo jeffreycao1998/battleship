@@ -101,6 +101,12 @@ io.on('connect', socket => {
     resetData(players, shipCoordinates);
     resetBoard(io, players);
 
+    if (players[1].data.name === 'Deep Blue') {
+      shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
+      players[1].data.ready = true;
+      console.log('computer ready');
+    }
+
     io.emit('log move', {
       player: 'game',
       name: socket.data.name,

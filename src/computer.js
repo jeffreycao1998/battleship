@@ -10,7 +10,7 @@ const letters = [
   'Y', 'Z'
 ];
 
-const genCoordinate = (boardSize, ship, orientation) => {
+const genCoordinate = (boardSize, ship, orientation, shipCoordinates) => {
   const result = {};
   let randX, randY;
   let shipLength;
@@ -38,6 +38,21 @@ const genCoordinate = (boardSize, ship, orientation) => {
     randY = Math.floor(Math.random() * boardSize);
   }
 
+  // makes sure ships don't get placed on top of previously placed ships
+  if (orientation === 0) {
+    for (let i = 0; i < shipLength; i++) {
+      if (shipCoordinates[`p2-${letters[randY]}${randX + i}`]) {
+        genCoordinate(boardSize, ship, orientation, shipCoordinates);
+      }
+    }
+  } else if (orientation === 1) {
+    for (let i = 0; i < shipLength; i++) {
+      if (shipCoordinates[`p2-${letters[randY + i]}${randX}`]) {
+        genCoordinate(boardSize, ship, orientation, shipCoordinates);
+      }
+    }
+  }
+
   return { randX, randY };
 };
 
@@ -58,27 +73,27 @@ const setUpComputerBoard = (io, { name, shipsNotPlaced, boardSize }) => {
   for (let ship of shipsNotPlaced) {
     if (ship === 'carrier') {
       const orientation = Math.round(Math.random());
-      const { randX, randY } = genCoordinate(boardSize, ship, orientation)
+      const { randX, randY } = genCoordinate(boardSize, ship, orientation, shipCoordinates)
 
       storeCoordinates(shipCoordinates, 5, randX, randY, orientation, currentShip);
     } else if (ship === 'battleship') {
       const orientation = Math.round(Math.random());
-      const { randX, randY } = genCoordinate(boardSize, ship, orientation)
+      const { randX, randY } = genCoordinate(boardSize, ship, orientation, shipCoordinates)
 
       storeCoordinates(shipCoordinates, 4, randX, randY, orientation, currentShip);
     } else if (ship === 'cruiser') {
       const orientation = Math.round(Math.random());
-      const { randX, randY } = genCoordinate(boardSize, ship, orientation)
+      const { randX, randY } = genCoordinate(boardSize, ship, orientation, shipCoordinates)
 
       storeCoordinates(shipCoordinates, 3, randX, randY, orientation, currentShip);
     } else if (ship === 'submarine') {
       const orientation = Math.round(Math.random());
-      const { randX, randY } = genCoordinate(boardSize, ship, orientation)
+      const { randX, randY } = genCoordinate(boardSize, ship, orientation, shipCoordinates)
 
       storeCoordinates(shipCoordinates, 3, randX, randY, orientation, currentShip);
     } else if (ship === 'destroyer') {
       const orientation = Math.round(Math.random());
-      const { randX, randY } = genCoordinate(boardSize, ship, orientation)
+      const { randX, randY } = genCoordinate(boardSize, ship, orientation, shipCoordinates)
 
       storeCoordinates(shipCoordinates, 2, randX, randY, orientation, currentShip);
     }
