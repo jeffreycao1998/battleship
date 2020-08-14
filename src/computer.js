@@ -106,12 +106,51 @@ const setUpComputerBoard = (io, { name, shipsNotPlaced, boardSize }) => {
   return shipCoordinates;
 };
 
-const computerAttack = ({boardSize, cellsAttacked }) => {
+const computerAttack = ({boardSize, cellsAttacked, difficulty }, shipCoordinates, cheat) => {
   const { randX, randY } = genCoordinate(boardSize);
   const shot = `p1-${letters[randY]}${randX}`;
+  const cheapShot = Math.round(Math.random() * 120);
   
+  if (difficulty === 'hard') {
+    if (cheapShot < 20 || cheat) {
+      const keys = Object.keys(shipCoordinates);
+      const randKey = keys[Math.floor(Math.random() * keys.length)];
+
+      if (cellsAttacked.hasOwnProperty(randKey)) {
+        return computerAttack({boardSize, cellsAttacked, difficulty}, shipCoordinates, true);
+      }
+      console.log('computer cheated!');
+      cellsAttacked[randKey] = true;
+      return randKey;
+    }
+  }
+  if (difficulty === 'medium') {
+    if (cheapShot < 10 || cheat) {
+      const keys = Object.keys(shipCoordinates);
+      const randKey = keys[Math.floor(Math.random() * keys.length)];
+
+      if (cellsAttacked.hasOwnProperty(randKey)) {
+        return computerAttack({boardSize, cellsAttacked, difficulty}, shipCoordinates, true);
+      }
+      cellsAttacked[randKey] = true;
+      return randKey;
+    }
+  }
+  if (difficulty === 'easy') {
+    if (cheapShot < 5 || cheat) {
+      const keys = Object.keys(shipCoordinates);
+      const randKey = keys[Math.floor(Math.random() * keys.length)];
+
+      if (cellsAttacked.hasOwnProperty(randKey)) {
+        return computerAttack({boardSize, cellsAttacked, difficulty}, shipCoordinates, true);
+      }
+      cellsAttacked[randKey] = true;
+      return randKey;
+    }
+  }
+
   if (cellsAttacked.hasOwnProperty(shot)) {
-    return computerAttack({boardSize, cellsAttacked});
+    return computerAttack({boardSize, cellsAttacked, difficulty}, shipCoordinates);
   }
   cellsAttacked[shot] = true;
   return `p1-${letters[randY]}${randX}`;

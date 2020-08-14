@@ -31,7 +31,7 @@ const setInitialData = (socket, name, player) => {
     currentShip: 1,
     shipOrientation: 'horizontal',
     boardSize: 10,
-    shotsPerTurn: 5,
+    shotsPerTurn: 3,
     ready: false,
     targets: 0,
     targetsHit: 0,

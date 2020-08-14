@@ -475,6 +475,10 @@ body {
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
+  width: 400px;
+  height: 560px;
+  background-color: #3d3d3d;
+  border-radius: 4px;
   display: none;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -484,27 +488,35 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
   font-family: Arial, Helvetica, sans-serif;
-}
-
-#settings-screen .settings-container {
-  width: 400px;
-  max-height: 1200px;
   background-color: #3d3d3d;
-  font-size: 20px;
   border-radius: 4px;
+}
+
+#settings-screen nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   padding: 15px;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
 }
 
-#settings-screen .settings-container #settings {
-  border: none;
-  margin-bottom: 10px;
+#settings-screen nav h2 {
+  margin-right: 15px;
+  border-radius: 4px;
+  padding: 5px 15px;
+  border: 1px solid black;
 }
 
-#settings-screen .settings-container .close-settings {
+#settings-screen nav h2:hover {
+  cursor: pointer;
+}
+
+#settings-screen nav .close-settings {
   position: absolute;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -516,8 +528,8 @@ body {
       -ms-flex-align: center;
           align-items: center;
   color: white;
-  top: 10px;
-  right: 10px;
+  top: 10;
+  right: 15px;
   border: none;
   cursor: pointer;
   margin: 0;
@@ -526,11 +538,37 @@ body {
   background-color: #cf2727;
 }
 
-#settings-screen .settings-container .close-settings ion-icon {
+#settings-screen nav .close-settings:hover {
+  background-color: #d93131;
+}
+
+#settings-screen nav .close-settings ion-icon {
   width: 20px;
   height: 20px;
   color: white;
   font-weight: 400;
+}
+
+#settings-screen nav #settings-normal-tab {
+  background-color: #4444ac;
+}
+
+#settings-screen .settings-container {
+  width: 100%;
+  height: 100%;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  font-size: 20px;
+  padding: 15px;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#settings-screen .settings-container #settings {
+  border: none;
+  margin-bottom: 10px;
 }
 
 #settings-screen .settings-container > * {
@@ -570,6 +608,8 @@ body {
   line-height: 100%;
   vertical-align: middle;
   margin: auto 20px;
+  width: 20px;
+  text-align: center;
 }
 
 #settings-screen .settings-container > * > * .modify button {
@@ -647,5 +687,29 @@ body {
 #settings-screen .settings-container #apply-settings:hover {
   cursor: pointer;
   background-color: #3a3a92;
+}
+
+#settings-screen .settings-container #apply-settings-difficulty {
+  background-color: #4444ac;
+  color: white;
+  padding: 10px 30px;
+  outline: none;
+  border: none;
+  border-radius: 2px;
+  font-size: 20px;
+  margin: auto auto;
+}
+
+#settings-screen .settings-container #apply-settings-difficulty:hover {
+  cursor: pointer;
+  background-color: #3a3a92;
+}
+
+#settings-screen .computer-settings {
+  display: none;
+}
+
+#settings-screen .normal-settings {
+  display: block;
 }
 /*# sourceMappingURL=style.css.map */

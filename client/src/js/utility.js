@@ -21,7 +21,8 @@ const changeTurn = (player) => {
 const addTextToLog = (message, player, name) => {
   const previousLog = $('.log-container').html();
   $('.log-container').html(previousLog + `<p class="p${player}">${name.toUpperCase()} ${message}</p>`);
-  $('.log-container').scrollTop($('.log-container').height())
+  // $('.log-container').scrollTop($('.log-container').height())
+  $('.log-container').scrollTop(35 * $('.log-container').children().length);
 };
 
 const updatePlayerName = ({player, name}) => {
@@ -170,6 +171,20 @@ const addButtonEventHandlers = () => {
     $('#settings-screen').css('display', 'flex');
   });
 
+  $('#settings-normal-tab').on('click', () => {
+    $('#settings-normal-tab').css('background-color', '#4444ac')
+    $('#settings-computer-tab').css('background-color', 'rgb(61, 61, 61)')
+    $('.computer-settings').css('display', 'none');
+    $('.normal-settings').css('display', 'block');
+  });
+
+  $('#settings-computer-tab').on('click', () => {
+    $('#settings-computer-tab').css('background-color', '#4444ac')
+    $('#settings-normal-tab').css('background-color', 'rgb(61, 61, 61)')
+    $('.normal-settings').css('display', 'none');
+    $('.computer-settings').css('display', 'block');
+  });
+
   $('#apply-settings').on('click', () => {
     $('#settings-screen').css('display', 'none');
 
@@ -184,6 +199,14 @@ const addButtonEventHandlers = () => {
       shipsNotPlaced: [...newShipSettings],
     }
     socket.emit('apply settings', {firstShot, newSettings});
+  });
+
+  $('#apply-settings-difficulty').on('click', () => {
+    $('#settings-screen').css('display', 'none');
+
+    const newDifficulty = $("input[name='difficulty']:checked").val();
+
+    socket.emit('apply ai difficulty settings', newDifficulty);
   });
 
   $('.close-settings').on('click', () => {

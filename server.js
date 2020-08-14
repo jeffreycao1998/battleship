@@ -75,6 +75,7 @@ io.on('connect', socket => {
     players[1].data.ready = true;
     players[1].data.cellsAttacked = {};
     players[1].data.ai = true;
+    players[1].data.difficulty = 'easy';
   });
 
   socket.on('apply settings', ({ firstShot, newSettings }) => {
@@ -90,7 +91,7 @@ io.on('connect', socket => {
 
     if (players[0].data.ready && players[1].data.ready) {
       io.emit('log move', {
-        player: '2',
+        player: 'game',
         name: socket.data.name,
         message: "you can't change the settings in the middle of a game!"
       });
@@ -98,14 +99,16 @@ io.on('connect', socket => {
     }
 
     if (players[1].data.ai) {
-      // shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
-      // players[1].data.ready = true;
-      // players[1].data.cellsAttacked = {};
-
       io.emit('log move', {
         player: '2',
         name: 'Deep Blue',
         message: `used UNO REVERSE!, couldn't change settings...`
+      });
+
+      io.emit('log move', {
+        player: '2',
+        name: 'Deep Blue',
+        message: `try changing the settings in the middle of a game again, see what happens.`
       });
       return;
     }
@@ -129,6 +132,28 @@ io.on('connect', socket => {
     });
   });
 
+  socket.on('apply ai difficulty settings', difficulty => {
+    if (!players[1].data.ai) {
+      return;
+    }
+
+    if (players[0].data.ready && players[1].data.ready) {
+      io.emit('log move', {
+        player: 'game',
+        name: socket.data.name,
+        message: "you can't change the settings in the middle of a game!"
+      });
+      return;
+    }
+    
+    players[1].data.difficulty = difficulty;
+    io.emit('log move', {
+      player: 'game',
+      name: socket.data.name,
+      message: `changed AI difficulty to ${difficulty}`
+    });
+  });
+
   socket.on('rematch', name => {
     // reset players shot attemps/turns and stuff to default
     resetData(players, shipCoordinates);
@@ -141,7 +166,7 @@ io.on('connect', socket => {
       message: `wants a rematch!`
     });
 
-    if (players[1].data.name === 'Deep Blue') {
+    if (players[1].data.ai) {
       shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
       players[1].data.ready = true;
       players[1].data.cellsAttacked = {};
@@ -210,10 +235,10 @@ io.on('connect', socket => {
       });
     }
 
-    if (players[1].data.name === 'Deep Blue' && players[1].data.turnToShoot) {
+    if (players[1].data.ai && players[1].data.turnToShoot) {
 
       for (let i = 0; i < players[1].data.shotsPerTurn; i++) {
-        const cell = computerAttack(players[1].data);
+        const cell = computerAttack(players[1].data, shipCoordinates.p1);
         handleShot(1, shipCoordinates, cell, io, players[1], players);
       }
     };
@@ -240,9 +265,9 @@ io.on('connect', socket => {
     }
 
     // Computer
-    if (players[1].data.name === 'Deep Blue' && players[1].data.turnToShoot) {
+    if (players[1].data.ai && players[1].data.turnToShoot) {
       for (let i = 0; i < players[1].data.shotsPerTurn; i++) {
-        const cell = computerAttack(players[1].data);
+        const cell = computerAttack(players[1].data, shipCoordinates.p1);
         handleShot(1, shipCoordinates, cell, io, players[1], players);
         if (players[1].data.targetsHit === players[1].data.targets) {
           return;

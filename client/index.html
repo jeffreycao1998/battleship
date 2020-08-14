@@ -98,17 +98,21 @@
   </section>
 
   <section id="settings-screen">
-    <div class="settings-container">
-      <h1 id="settings">Settings</h1>
+    <nav>
+      <h2 id="settings-normal-tab">Settings</h2>
+      <h2 id="settings-computer-tab">Computer</h2>
       <div class="close-settings">
         <ion-icon name="close-outline"></ion-icon>
       </div>
+    </nav>
+    <div class="settings-container normal-settings">
       <div class="reg-settings">
+
         <div class="shots-per-turn">
           <div>Shots/Turn</div>
           <div class="modify">
             <button class="shots-per-turn-nums-dec">-</button>
-            <p class="shots-per-turn-nums-num">1</p>
+            <p class="shots-per-turn-nums-num">3</p>
             <button class="shots-per-turn-nums-inc">+</button>
           </div>
         </div>
@@ -188,6 +192,27 @@
       </div>
 
       <button id="apply-settings">Apply</button>
+    </div>
+
+    <div class="settings-container computer-settings">
+      <div class="first-shot-settings">
+        <h4>Difficulty</h4>
+        <div class="first-shot-buttons">
+          <label>
+            <input type="radio" name="difficulty" value="easy" checked>
+            Easy
+          </label>
+          <label>
+            <input type="radio" name="difficulty" value="medium">
+            Medium
+          </label>
+          <label>
+            <input type="radio" name="difficulty" value="hard">
+            Hard
+          </label>
+        </div>
+      </div>
+      <button id="apply-settings-difficulty">Apply</button>
     </div>
   </section>
 
