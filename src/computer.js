@@ -1,3 +1,5 @@
+const nodemon = require("nodemon");
+
 const letters = [
   'A', 'B', 'C', 'D', 
   'E', 'F', 'G', 'H', 
@@ -28,10 +30,12 @@ const genCoordinate = (boardSize, ship, orientation) => {
   if (orientation === 0) {
     randX = Math.ceil(Math.random() * (boardSize - shipLength));
     randY = Math.floor(Math.random() * boardSize);
-  }
-  if (orientation === 1) {
+  } else if (orientation === 1) {
     randX = Math.ceil(Math.random() * boardSize);
     randY = Math.floor(Math.random() * (boardSize - shipLength + 1));
+  } else {
+    randX = Math.ceil(Math.random() * boardSize);
+    randY = Math.floor(Math.random() * boardSize);
   }
 
   return { randX, randY };
@@ -90,25 +94,13 @@ const setUpComputerBoard = (io, { name, shipsNotPlaced, boardSize }) => {
   return shipCoordinates;
 };
 
-const computerAttack = () => {
-
+const computerAttack = ({boardSize}) => {
+  const { randX, randY } = genCoordinate(boardSize);
+  // console.log(letters[randY], randX);
+  return `p1-${letters[randY]}${randX}`;
 };
-
-// player,
-//     name,
-//     shipsNotPlaced: ['carrier', 'battleship'],//, 'cruiser', 'submarine', 'destroyer'],
-//     currentShip: 1,
-//     shipOrientation: 'horizontal',
-//     boardSize: 10,
-//     shotsPerTurn: 5,
-//     ready: false,
-//     targets: 0,
-//     targetsHit: 0,
-//     turnToShoot: false,
-//     shotsTaken: 0,
-//     left: false,
-//     ai: false,
 
 module.exports = {
   setUpComputerBoard,
+  computerAttack,
 }

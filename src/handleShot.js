@@ -1,6 +1,9 @@
+const { computerAttack } = require('./computer');
+
 const changePlayerTurn = (io, socket, players) => {
   players[0].data.turnToShoot = !players[0].data.turnToShoot;
   players[1].data.turnToShoot = !players[1].data.turnToShoot;
+
   socket.data.shotsTaken = 0;
 
   io.emit('turn', players[0].data.turnToShoot ? 1 : 2);
@@ -25,6 +28,7 @@ const emitShotHit = (io, socket, cell, ship) => {
 };
 
 const emitShotMissed = (io, socket, cell) => {
+  console.log(cell);
   io.emit('miss ship', cell);
   io.emit('log move', {
     player: socket.data.player,
@@ -36,6 +40,8 @@ const emitShotMissed = (io, socket, cell) => {
 const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players) => {
   const shotsPerTurn = socket.data.shotsPerTurn;
   const totalTargets = socket.data.targets;
+
+  socket.data.shotsTaken += 1;
 
   // checks if cell fired at contains a ship
   if (shipCoordinates[`p${boardClicked}`].hasOwnProperty(cell)) {
@@ -49,6 +55,9 @@ const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players) =>
       shipCoordinates.p1 = {ready: false};
       shipCoordinates.p2 = {ready: false};
 
+      if (players[1].data.name === 'Deep Blue') {
+        shipCoordinates.p2 = {ready: true};
+      }
       emitEndGame(io, socket);
     }
 

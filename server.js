@@ -5,9 +5,9 @@ const { setTurn, incrementCurrentShip } = require('./src/shipSetup');
 const { handleShot } = require('./src/handleShot');
 const { resetData, resetBoard } = require('./src/reset');
 
-const { setUpComputerBoard } = require('./src/computer');
+const { setUpComputerBoard, computerAttack } = require('./src/computer');
 
-let whoseTurn = 'random';
+let whoseTurn = 'p2';
 const players = [];
 const shipCoordinates = {
   p1: {},
@@ -164,6 +164,14 @@ io.on('connect', socket => {
       name: socket.data.name,
       message: 'finished placing ships'
     });
+
+    if (players[1].data.name === 'Deep Blue' && players[1].data.turnToShoot) {
+
+      for (let i = 0; i < players[1].data.shotsPerTurn; i++) {
+        const cell = computerAttack(players[1].data);
+        handleShot(1, shipCoordinates, cell, io, players[1], players);
+      }
+    };
   });
 
   // returns logic for each shot whether its a hit/miss
@@ -178,17 +186,21 @@ io.on('connect', socket => {
 
     // Player 1
     if (boardClicked == 2 && player == 1) {
-      socket.data.shotsTaken += 1;
-      
       handleShot(boardClicked, shipCoordinates, cell, io, socket, players);
     }
 
     // Player 2
     if (boardClicked == 1 && player == 2) {
-      socket.data.shotsTaken += 1;
-
       handleShot(boardClicked, shipCoordinates, cell, io, socket, players);
     }
+
+    // Computer
+    if (players[1].data.name === 'Deep Blue' && players[1].data.turnToShoot) {
+      for (let i = 0; i < players[1].data.shotsPerTurn; i++) {
+        const cell = computerAttack(players[1].data);
+        handleShot(1, shipCoordinates, cell, io, players[1], players);
+      }
+    };
   });
 
   socket.on('concede', (player) => {
