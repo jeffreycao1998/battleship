@@ -18,6 +18,7 @@ const computer = {};
 io.on('connect', socket => {
   
   socket.on('play friend', name => {
+
     if (players.length === 0) {
       players.push(socket);
       setInitialData(socket, name, 1);
@@ -31,9 +32,17 @@ io.on('connect', socket => {
     } else {
       // check for any previous players that disconnected
       for (let i = 0; i < players.length; i++) {
+
         if (players[i].data.left) {
           players[i] = socket;
           setInitialData(socket, name, i + 1);
+          resetData(players, shipCoordinates);
+          resetBoard(io, players);
+
+        } else if (players[1].data.name === 'Deep Blue') {
+          console.log(players[1].data.name);
+          players[1] = socket;
+          setInitialData(socket, name, 2);
           resetData(players, shipCoordinates);
           resetBoard(io, players);
         }
@@ -114,6 +123,7 @@ io.on('connect', socket => {
     // reset players shot attemps/turns and stuff to default
     resetData(players, shipCoordinates);
     resetBoard(io, players);
+    socket.data.wantRematch = true;
 
     io.emit('log move', {
       player: 'game',
@@ -125,6 +135,7 @@ io.on('connect', socket => {
       shipCoordinates.p2 = setUpComputerBoard(io, players[1].data);
       players[1].data.ready = true;
       players[1].data.cellsAttacked = {};
+      players[1].data.wantRematch = true;
     }
   });
 
@@ -171,18 +182,23 @@ io.on('connect', socket => {
   socket.on('player ready', data => {
     socket.data.ready = true;
     const readyP1 = players[0].data.ready;
-    const readyP2 = players[1].data.ready
+    const readyP2 = players[1].data.ready;
+    const rematchP1 = players[0].data.wantRematch;
+    const rematchP2 = players[1].data.wantRematch;
 
     if (readyP1 && readyP2) {
       setTurn(whoseTurn, io, players);
-      io.emit('start attack');
+      io.to(players[0].id).emit('start attack', players[0].data);
+      io.to(players[1].id).emit('start attack', players[1].data);
     }
 
-    io.emit('log move', {
-      player: 'game',
-      name: socket.data.name,
-      message: 'finished placing ships'
-    });
+    if (rematchP1 && rematchP2) {
+      io.emit('log move', {
+        player: 'game',
+        name: socket.data.name,
+        message: 'finished placing ships'
+      });
+    }
 
     if (players[1].data.name === 'Deep Blue' && players[1].data.turnToShoot) {
 

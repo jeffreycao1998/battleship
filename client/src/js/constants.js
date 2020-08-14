@@ -10,6 +10,7 @@ const letters = [
 
 const colorRoyalBlue = 'rgb(68, 68, 172)';
 const colorLightBlue = 'rgb(235, 235, 255)';
+const colorBoardHover = 'rgb(215, 215, 215)';
 
 const colorBlue = 'rgb(102, 102, 168)';
 const colorRed = 'rgb(172, 103, 103)';

@@ -39,6 +39,7 @@ const setInitialData = (socket, name, player) => {
     shotsTaken: 0,
     left: false,
     ai: false,
+    wantRematch: false,
   }
   setNumOfTargets(socket);
 }
