@@ -39,16 +39,16 @@ const genCoordinate = (boardSize, ship, orientation, shipCoordinates) => {
   }
 
   // makes sure ships don't get placed on top of previously placed ships
-  if (orientation === 0) {
-    for (let i = 0; i < shipLength; i++) {
+  for (let i  = 0; i < shipLength; i++) {
+    if (orientation === 0) {
       if (shipCoordinates[`p2-${letters[randY]}${randX + i}`]) {
-        genCoordinate(boardSize, ship, orientation, shipCoordinates);
+        console.log(shipCoordinates[`p2-${letters[randY]}${randX + i}`])
+        return genCoordinate(boardSize, ship, orientation, shipCoordinates);
       }
-    }
-  } else if (orientation === 1) {
-    for (let i = 0; i < shipLength; i++) {
+    } else if (orientation === 1) {
       if (shipCoordinates[`p2-${letters[randY + i]}${randX}`]) {
-        genCoordinate(boardSize, ship, orientation, shipCoordinates);
+        console.log(shipCoordinates[`p2-${letters[randY + i]}${randX}`]);
+        return genCoordinate(boardSize, ship, orientation, shipCoordinates);
       }
     }
   }

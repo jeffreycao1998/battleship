@@ -27,7 +27,7 @@ const setInitialData = (socket, name, player) => {
   socket.data = {
     player,
     name,
-    shipsNotPlaced: ['carrier', 'battleship'],//, 'cruiser', 'submarine', 'destroyer'],
+    shipsNotPlaced: ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'],
     currentShip: 1,
     shipOrientation: 'horizontal',
     boardSize: 10,

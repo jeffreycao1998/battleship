@@ -38,6 +38,7 @@ const emitShotMissed = (io, socket, cell) => {
 };
 
 const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players) => {
+  console.log(shipCoordinates);
   const shotsPerTurn = socket.data.shotsPerTurn;
   const totalTargets = socket.data.targets;
 
