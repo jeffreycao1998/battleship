@@ -25,6 +25,7 @@ body {
   width: 100%;
   height: 100vh;
   position: relative;
+  overflow: hidden;
 }
 
 #main-page {
@@ -282,9 +283,7 @@ body {
     min-width: 400px;
     max-width: 550px;
     height: 100%;
-    border: 1px solid $dark-blue;
     background-color: $dark-blue;
-    border: 2px solid $hover-dark-blue;
     nav {
       display: flex;
       .leaderboard-tab {
