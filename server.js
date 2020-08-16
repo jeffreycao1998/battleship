@@ -9,6 +9,8 @@ const { resetData, resetBoard } = require('./src/reset');
 
 const { setUpComputerBoard, computerAttack } = require('./src/computer');
 
+const { incrementWin, incrementLose } = require('./src/dbCRUD');
+
 // connect to postgres server
 const connectionString = process.env.PGCONNECTIONSTRING;
 
@@ -17,6 +19,9 @@ const client = new Client({
 })
 
 client.connect()
+
+// incrementLose(client, 'Potato', 'easyStats');
+
 client.query('SELECT * FROM public."easyStats"', (err, res) => {
   if (err) {
     console.log(err.stack)
@@ -24,6 +29,13 @@ client.query('SELECT * FROM public."easyStats"', (err, res) => {
     console.log(res.rows);
   }
 })
+
+const db = {
+  easyStats: {},
+  mediumStats: {},
+  hardStats: {},
+  replays: {},
+}
 
 // init global variables
 const players = [];
@@ -258,7 +270,7 @@ io.on('connect', socket => {
 
       for (let i = 0; i < players[1].data.shotsPerTurn; i++) {
         const cell = computerAttack(players[1].data, shipCoordinates.p1);
-        handleShot(1, shipCoordinates, cell, io, players[1], players);
+        handleShot(1, shipCoordinates, cell, io, players[1], players, client);
       }
     };
   });
@@ -275,19 +287,19 @@ io.on('connect', socket => {
 
     // Player 1
     if (boardClicked == 2 && player == 1) {
-      handleShot(boardClicked, shipCoordinates, cell, io, socket, players);
+      handleShot(boardClicked, shipCoordinates, cell, io, socket, players, client);
     }
 
     // Player 2
     if (boardClicked == 1 && player == 2) {
-      handleShot(boardClicked, shipCoordinates, cell, io, socket, players);
+      handleShot(boardClicked, shipCoordinates, cell, io, socket, players, client);
     }
 
     // Computer
     if (players[1].data.ai && players[1].data.turnToShoot) {
       for (let i = 0; i < players[1].data.shotsPerTurn; i++) {
         const cell = computerAttack(players[1].data, shipCoordinates.p1);
-        handleShot(1, shipCoordinates, cell, io, players[1], players);
+        handleShot(1, shipCoordinates, cell, io, players[1], players, client);
         if (players[1].data.targetsHit === players[1].data.targets) {
           return;
         }

@@ -1,4 +1,4 @@
-const { computerAttack } = require('./computer');
+const { incrementWin, incrementLose } = require('./dbCRUD');
 
 const changePlayerTurn = (io, socket, players) => {
   players[0].data.turnToShoot = !players[0].data.turnToShoot;
@@ -36,7 +36,7 @@ const emitShotMissed = (io, socket, cell) => {
   });
 };
 
-const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players) => {
+const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players, client) => {
   const shotsPerTurn = socket.data.shotsPerTurn;
   const totalTargets = socket.data.targets;
 
@@ -54,6 +54,19 @@ const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players) =>
       shipCoordinates.p1 = {ready: false};
       shipCoordinates.p2 = {ready: false};
 
+      if (players[1].data.ai) {
+        const difficulty = players[1].data.difficulty;
+
+        if (socket.data.ai) {
+          const loserName = players[0].data.name;
+
+          incrementLose(client, players[0].data.name, `${difficulty}Stats`)
+        } else {
+          const winnerName = players[0].data.name;
+
+          incrementWin(client, winnerName, `${difficulty}Stats`)
+        }
+      }
       emitEndGame(io, socket);
     }
 

@@ -133,9 +133,7 @@ body {
   background-color: #f3f3f3;
   max-width: 1920px;
   height: 1080px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   padding-left: 100px;
   /****PLAYER BOARDS****/
   /*********LOG**********/
