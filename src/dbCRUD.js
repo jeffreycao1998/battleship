@@ -51,7 +51,40 @@ const incrementLose = (client, username, tableName) => {
   })
 };
 
+const storeGameData = (client, moveSequence, gamePlayers) => {
+  client.query(`INSERT INTO public.replays (movesequence, players) VALUES ('${moveSequence}'::json, '${gamePlayers}'::json)`, (err, res) => {
+    if (err) {
+      console.log(err.stack);
+    } else {
+      console.log('storred game data');
+    }
+  });
+};
+
+const getStats = (client, difficulty) => {
+  client.query(`SELECT * FROM public."${difficulty}Stats"`, (err, res) => {
+    if (err) {
+      console.log(err.stack);
+    } else {
+      return res.rows;
+    }
+  })
+};
+
+const getReplays = (client) => {
+  client.query(`SELECT * FROM public.replays`, (err, res) => {
+    if (err) {
+      console.log(err.stack);
+    } else {
+      console.log(res.rows[2]);
+    }
+  })
+}
+
 module.exports = {
   incrementWin,
   incrementLose,
+  storeGameData,
+  getStats,
+  getReplays,
 }

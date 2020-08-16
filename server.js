@@ -9,7 +9,7 @@ const { resetData, resetBoard } = require('./src/reset');
 
 const { setUpComputerBoard, computerAttack } = require('./src/computer');
 
-const { incrementWin, incrementLose } = require('./src/dbCRUD');
+const { getStats, getReplays } = require('./src/dbCRUD');
 
 // connect to postgres server
 const connectionString = process.env.PGCONNECTIONSTRING;
@@ -20,22 +20,8 @@ const client = new Client({
 
 client.connect()
 
-// incrementLose(client, 'Potato', 'easyStats');
-
-client.query('SELECT * FROM public."easyStats"', (err, res) => {
-  if (err) {
-    console.log(err.stack)
-  } else {
-    console.log(res.rows);
-  }
-})
-
-const db = {
-  easyStats: {},
-  mediumStats: {},
-  hardStats: {},
-  replays: {},
-}
+getStats(client, 'easy');
+getReplays(client);
 
 // init global variables
 const players = [];
@@ -45,6 +31,7 @@ const shipCoordinates = {
 }
 const computer = {};
 let whoseTurn = 'random'; // valid values are 'random', 'p1', 'p2'
+let moveSequence = [];
 
 io.on('connect', socket => {
   
@@ -69,6 +56,7 @@ io.on('connect', socket => {
           setInitialData(socket, name, i + 1);
           resetData(players, shipCoordinates);
           resetBoard(io, players);
+          return;
 
         } else if (players[1].data.ai) {
           console.log(players[1].data.name);
@@ -79,6 +67,8 @@ io.on('connect', socket => {
         }
       }
     }
+
+    console.log(players.length);
 
     io.emit('log move', {
       name,
@@ -287,12 +277,12 @@ io.on('connect', socket => {
 
     // Player 1
     if (boardClicked == 2 && player == 1) {
-      handleShot(boardClicked, shipCoordinates, cell, io, socket, players, client);
+      handleShot(boardClicked, shipCoordinates, cell, io, socket, players, client, moveSequence);
     }
 
     // Player 2
     if (boardClicked == 1 && player == 2) {
-      handleShot(boardClicked, shipCoordinates, cell, io, socket, players, client);
+      handleShot(boardClicked, shipCoordinates, cell, io, socket, players, client, moveSequence);
     }
 
     // Computer
@@ -321,7 +311,7 @@ io.on('connect', socket => {
     const player = players[i];
 
     if (player && players[i].data) {
-      io.emit('won game', socket.data.player === 1 ? players[1].data.name : players[0].data.name);
+      io.to(socket.data.player === 1 ? players[1].id : players[0].id).emit('won game', socket.data.player === 1 ? players[1].data.name : players[0].data.name);
       io.emit('log move', {
         player: 'game',
         name: socket.data.name,
@@ -331,6 +321,7 @@ io.on('connect', socket => {
     
     if (socket.data) {
       socket.data.left = true;
+      console.log(socket.data.name, 'left the game');
       socket.data.name = undefined;
       io.emit('player disconnected', socket.data);
     }

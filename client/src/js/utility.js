@@ -293,5 +293,3 @@ const addButtonEventHandlers = () => {
   addEventListenerForSettings('submarine');
   addEventListenerForSettings('destroyer');
 };
-
-addButtonEventHandlers();

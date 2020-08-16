@@ -1,4 +1,4 @@
-const { incrementWin, incrementLose } = require('./dbCRUD');
+const { incrementWin, incrementLose, storeGameData } = require('./dbCRUD');
 
 const changePlayerTurn = (io, socket, players) => {
   players[0].data.turnToShoot = !players[0].data.turnToShoot;
@@ -36,7 +36,7 @@ const emitShotMissed = (io, socket, cell) => {
   });
 };
 
-const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players, client) => {
+const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players, client, moveSequence) => {
   const shotsPerTurn = socket.data.shotsPerTurn;
   const totalTargets = socket.data.targets;
 
@@ -49,6 +49,9 @@ const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players, cl
     
     emitShotHit(io, socket, cell, ship);
 
+    if (!socket.data.ai) {
+      moveSequence.push({ cell, result: 'hit'});
+    }
     // ends game if all ships shot
     if (socket.data.targetsHit === totalTargets) {
       shipCoordinates.p1 = {ready: false};
@@ -66,14 +69,38 @@ const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players, cl
 
           incrementWin(client, winnerName, `${difficulty}Stats`)
         }
+      } else {
+        const gamePlayers = { 
+          p1: {
+            name: players[0].data.name, 
+            result: 'lose',
+          },
+          p2: {
+            name: players[1].data.name,
+            result: 'lose',
+          },
+        }
+
+        if (socket.data.player === 1) {
+          gamePlayers.p1.result = 'win';
+        } else {
+          gamePlayers.p2.result = 'win';
+        }
+
+        storeGameData(client, JSON.stringify(moveSequence), JSON.stringify(gamePlayers));
       }
+        
+      moveSequence = [];
       emitEndGame(io, socket);
     }
 
   } else {
     emitShotMissed(io, socket, cell);
+    if (!socket.data.ai) {
+      moveSequence.push({ cell, result: 'miss'});
+    }
   }
-
+  
   // change turns when all shots taken
   if (socket.data.shotsTaken >= shotsPerTurn) {
     changePlayerTurn(io, socket, players);
