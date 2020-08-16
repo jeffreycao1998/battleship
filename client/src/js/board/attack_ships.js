@@ -36,10 +36,7 @@ const allowPlayersToAttack = ({ player }) => {
     const target = $(event.target);
     const cellClicked = target.attr('class').split(' ')[1];
 
-    if (target.hasClass('hit') || target.hasClass('miss')) {
-      console.log('this cell was already shot at');
-      return;
-    }
+    if (target.hasClass('hit') || target.hasClass('miss')) return;
     socket.emit('shoot', cellClicked);
   });
 };

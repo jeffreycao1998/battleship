@@ -1,8 +1,8 @@
 const makeFullscreen = () => {
   $('#game-page').css("display", "flex");
-  // document.documentElement.requestFullscreen().catch((err) => {
-  //   console.log(err);
-  // });
+  document.documentElement.requestFullscreen().catch((err) => {
+    console.log(err);
+  });
 }
 
 const changeTurn = (player) => {
@@ -185,7 +185,6 @@ const setReplayHistory = (data) => {
       }
     }
 
-    console.log('p1Hit: ', p1Hit, 'p1Miss: ', p1Miss);
     const accuracyP1 = p1Hit / (p1Hit + p1Miss);
     const accuracyP2 = p2Hit / (p2Hit + p2Miss);
 

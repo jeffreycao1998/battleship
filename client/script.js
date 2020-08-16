@@ -13,7 +13,6 @@ socket.on('update view', data => {
 });
 
 socket.on('log move', ({player, name, message}) => {
-  console.log(message);
   addTextToLog(message, player, name);
 });
 

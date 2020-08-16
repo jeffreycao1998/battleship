@@ -71,7 +71,6 @@ io.on('connect', socket => {
           return;
 
         } else if (players[1].data.ai) {
-          console.log(players[1].data.name);
           players[1] = socket;
           setInitialData(socket, name, 2);
           resetData(players, shipCoordinates);
@@ -361,7 +360,6 @@ io.on('connect', socket => {
     
     if (socket.data) {
       socket.data.left = true;
-      console.log(socket.data.name, 'left the game');
       socket.data.name = undefined;
       io.emit('player disconnected', socket.data);
     }

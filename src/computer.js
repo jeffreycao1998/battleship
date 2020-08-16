@@ -119,7 +119,6 @@ const computerAttack = ({boardSize, cellsAttacked, difficulty }, shipCoordinates
       if (cellsAttacked.hasOwnProperty(randKey)) {
         return computerAttack({boardSize, cellsAttacked, difficulty}, shipCoordinates, true);
       }
-      console.log('computer cheated!');
       cellsAttacked[randKey] = true;
       return randKey;
     }
