@@ -419,6 +419,18 @@ body {
           flex-grow: 2;
 }
 
+#game-page .leaderboard-container #easy-leaderboard {
+  display: block;
+}
+
+#game-page .leaderboard-container #medium-leaderboard {
+  display: block;
+}
+
+#game-page .leaderboard-container #medium-leaderboard {
+  display: block;
+}
+
 #game-page .leaderboard-container .leaderboard {
   display: none;
 }
@@ -491,6 +503,10 @@ body {
   width: 42px;
 }
 
+#game-page .leaderboard-container .replays {
+  display: none;
+}
+
 #game-page .leaderboard-container .replays .column-identifier {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -530,9 +546,6 @@ body {
   display: -ms-flexbox;
   display: flex;
   padding: 10px 17px;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -544,7 +557,27 @@ body {
 }
 
 #game-page .leaderboard-container .replays .replays-container .replay .players {
+  text-align: left;
+  width: 140px;
+}
+
+#game-page .leaderboard-container .replays .replays-container .replay .players .win {
+  color: green;
+}
+
+#game-page .leaderboard-container .replays .replays-container .replay .players .lose {
+  color: red;
+}
+
+#game-page .leaderboard-container .replays .replays-container .replay .accuracy {
   text-align: center;
+  width: 100px;
+}
+
+#game-page .leaderboard-container .replays .replays-container .replay .button-container {
+  text-align: right;
+  width: 110px;
+  padding-right: 3px;
 }
 
 #winning-screen {
@@ -605,7 +638,7 @@ body {
   top: 50px;
 }
 
-#winning-screen .winning-container-background button {
+#winning-screen .winning-container-background .buttons-container button {
   width: 250px;
   background-color: #4444ac;
   color: white;
@@ -616,14 +649,18 @@ body {
   border-radius: 2px;
 }
 
-#winning-screen .winning-container-background button:hover {
+#winning-screen .winning-container-background .buttons-container button:hover {
   cursor: pointer;
   background-color: #3a3a92;
 }
 
-#winning-screen .winning-container-background button:active {
+#winning-screen .winning-container-background .buttons-container button:active {
   -webkit-transform: translateY(2px);
           transform: translateY(2px);
+}
+
+#winning-screen .winning-container-background .buttons-container #save-replay {
+  margin-left: 10px;
 }
 
 #settings-screen {

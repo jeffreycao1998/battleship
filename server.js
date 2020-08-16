@@ -9,7 +9,7 @@ const { resetData, resetBoard } = require('./src/reset');
 
 const { setUpComputerBoard, computerAttack } = require('./src/computer');
 
-const { getStats, getReplays } = require('./src/dbCRUD');
+const { storeGameData, getStats, getReplays } = require('./src/dbCRUD');
 
 // connect to postgres server
 const connectionString = process.env.PGCONNECTIONSTRING;
@@ -19,9 +19,6 @@ const client = new Client({
 })
 
 client.connect()
-
-getStats(client, 'easy');
-getReplays(client);
 
 // init global variables
 const players = [];
@@ -34,7 +31,22 @@ let whoseTurn = 'random'; // valid values are 'random', 'p1', 'p2'
 let moveSequence = [];
 
 io.on('connect', socket => {
-  
+  getStats(client, 'easy', (data) => {
+    io.to(socket.id).emit('load data', {data, difficulty: 'easy'});
+  });
+
+  getStats(client, 'medium', (data) => {
+    io.to(socket.id).emit('load data', {data, difficulty: 'medium'});
+  });
+
+  getStats(client, 'hard', (data) => {
+    io.to(socket.id).emit('load data', {data, difficulty: 'hard'});
+  });
+
+  getReplays(client, (data) => {
+    io.to(socket.id).emit('load replays', data);
+  });
+
   socket.on('play friend', name => {
 
     if (players.length === 0) {
@@ -67,8 +79,6 @@ io.on('connect', socket => {
         }
       }
     }
-
-    console.log(players.length);
 
     io.emit('log move', {
       name,
@@ -176,6 +186,10 @@ io.on('connect', socket => {
   });
 
   socket.on('rematch', name => {
+    if (socket.data.player !== 1 && socket.data.player !== 2) {
+      return;
+    }
+
     // reset players shot attemps/turns and stuff to default
     resetData(players, shipCoordinates);
     resetBoard(io, players);
@@ -193,6 +207,33 @@ io.on('connect', socket => {
       players[1].data.cellsAttacked = {};
       players[1].data.wantRematch = true;
     }
+  });
+
+  socket.on('save replay', () => {
+    if (moveSequence.length === 0 || players[1].data.ai) {
+      return;
+    }
+
+    const gamePlayers = { 
+      p1: {
+        name: players[0].data.name, 
+        result: 'lose',
+      },
+      p2: {
+        name: players[1].data.name,
+        result: 'lose',
+      },
+    }
+
+    if (players[0].data.targetsHit === players[0].data.targets) {
+      gamePlayers.p1.result = 'win';
+    } else {
+      gamePlayers.p2.result = 'win';
+    }
+
+    storeGameData(client, JSON.stringify(moveSequence), JSON.stringify(gamePlayers), socket.data.boardSize);
+
+    moveSequence = [];
   });
 
   // rotates ship
@@ -311,7 +352,6 @@ io.on('connect', socket => {
     const player = players[i];
 
     if (player && players[i].data) {
-      io.to(socket.data.player === 1 ? players[1].id : players[0].id).emit('won game', socket.data.player === 1 ? players[1].data.name : players[0].data.name);
       io.emit('log move', {
         player: 'game',
         name: socket.data.name,

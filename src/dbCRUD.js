@@ -26,12 +26,12 @@ const incrementWin = (client, username, tableName) => {
 };
 
 const incrementLose = (client, username, tableName) => {
-  client.query(`SELECT username FROM public."${tableName}" WHERE username = '${username}'`, (err, res) => {
+  client.query(`SELECT username FROM public.${tableName} WHERE username = '${username}'`, (err, res) => {
     if (err) {
       console.log(err.stack);
     } else {
       if (res.rows[0]) {
-        client.query(`UPDATE public."${tableName}" SET lose = lose + 1 WHERE username = '${username}'`, (err, res) => {
+        client.query(`UPDATE public.${tableName} SET lose = lose + 1 WHERE username = '${username}'`, (err, res) => {
           if (err) {
             console.log(err.stack);
           } else {
@@ -39,7 +39,7 @@ const incrementLose = (client, username, tableName) => {
           }
         });
       } else {
-        client.query(`INSERT INTO public."${tableName}" (username, win, lose) VALUES ('${username}', 0, 1)`, (err, res) => {
+        client.query(`INSERT INTO public.${tableName} (username, win, lose) VALUES ('${username}', 0, 1)`, (err, res) => {
           if (err) {
             console.log(err.stack);
           } else {
@@ -51,8 +51,8 @@ const incrementLose = (client, username, tableName) => {
   })
 };
 
-const storeGameData = (client, moveSequence, gamePlayers) => {
-  client.query(`INSERT INTO public.replays (movesequence, players) VALUES ('${moveSequence}'::json, '${gamePlayers}'::json)`, (err, res) => {
+const storeGameData = (client, moveSequence, gamePlayers, boardSize) => {
+  client.query(`INSERT INTO public.replays (movesequence, players, boardsize) VALUES ('${moveSequence}'::json, '${gamePlayers}'::json, ${boardSize})`, (err, res) => {
     if (err) {
       console.log(err.stack);
     } else {
@@ -61,22 +61,22 @@ const storeGameData = (client, moveSequence, gamePlayers) => {
   });
 };
 
-const getStats = (client, difficulty) => {
-  client.query(`SELECT * FROM public."${difficulty}Stats"`, (err, res) => {
+const getStats = (client, difficulty, cb) => {
+  client.query(`SELECT * FROM public.${difficulty}stats ORDER BY win desc`, (err, res) => {
     if (err) {
       console.log(err.stack);
     } else {
-      return res.rows;
+      cb(res.rows);
     }
   })
 };
 
-const getReplays = (client) => {
-  client.query(`SELECT * FROM public.replays`, (err, res) => {
+const getReplays = (client, cb) => {
+  client.query(`SELECT * FROM public.replays ORDER BY "gameId" desc`, (err, res) => {
     if (err) {
       console.log(err.stack);
     } else {
-      console.log(res.rows[2]);
+      cb(res.rows);
     }
   })
 }

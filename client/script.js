@@ -56,6 +56,14 @@ socket.on('won game', player => {
   showWinScreen(player);
 });
 
+socket.on('load data', (data) => {
+  setLeaderboardData(data)
+});
+
+socket.on('load replays', (data) => {
+  setReplayHistory(data);
+});
+
 socket.on('player disconnected', data => {
   updatePlayerName(data);
 });

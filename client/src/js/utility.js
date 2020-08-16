@@ -130,6 +130,86 @@ const getHowManyOfEachShip = () => {
   return result;
 };
 
+const setLeaderboardData = ({ data, difficulty }) => {
+  const easyStats = $('#easy-stats-container');
+  const mediumStats = $('#medium-stats-container');
+  const hardStats = $('#hard-stats-container');
+
+  for (let i = 0; i < data.length; i++) {
+    const html = `
+    <div class="player-stat">
+      <div class="player">
+        <div class="player-rank-column">${i + 1}</div>
+        <div class="player-name-column">${data[i].username}</div>
+      </div>
+      <div class="wins">
+        <div class="win-column">${data[i].win}</div>
+        <div class="lose-column">${data[i].lose}</div>
+      </div>
+    </div>`
+
+    if (difficulty === 'easy') {
+      easyStats.append(html);
+    } else if (difficulty === 'medium') {
+      mediumStats.append(html);
+    } else if (difficulty === 'hard') {
+      hardStats.append(html);
+    }
+
+  }
+};
+
+const setReplayHistory = (data) => {
+  const replaysContainer = $('.replays-container');
+
+  for (let i = 0; i < data.length; i++) {
+    let p1Hit = 0;
+    let p1Miss = 0;
+    let p2Hit = 0;
+    let p2Miss = 0;
+    const movesequence = data[i].movesequence;
+
+    for (let move of movesequence) {
+      if (move.cell[1] == 2) {
+        if (move.result === 'hit') {
+          p1Hit += 1;
+        } else {
+          p1Miss += 1;
+        }
+      } else {
+        if (move.result === 'hit') {
+          p2Hit += 1;
+        } else {
+          p2Miss += 1;
+        }
+      }
+    }
+
+    console.log('p1Hit: ', p1Hit, 'p1Miss: ', p1Miss);
+    const accuracyP1 = p1Hit / (p1Hit + p1Miss);
+    const accuracyP2 = p2Hit / (p2Hit + p2Miss);
+
+    const html = `
+    <div class="replay">
+      <div class="players">
+        <div class="${data[i].players.p1.result}">${data[i].players.p1.name}</div>
+        <div>&nbsp</div>
+        <div class="${data[i].players.p2.result}">${data[i].players.p2.name}</div>
+      </div>
+      <div class="accuracy">
+        <div>${Math.round(accuracyP1 * 100) || '0'}%</div>
+        <div>&nbsp</div>
+        <div>${Math.round(accuracyP2 * 100) || '0'}%</div>
+      </div>
+      <div class="button-container">
+        <div><button value="${data[i].gameId}">REPLAY</button></div>
+      </div>
+    </div>`
+
+    replaysContainer.append(html);
+  }
+};
+
 // button event handlers
 const addButtonEventHandlers = () => {
   $('.concede').on('click', () => {
@@ -162,11 +242,16 @@ const addButtonEventHandlers = () => {
 
     // removes all event listeners on board
     $('.board-cell').off('mouseover mouseleave click keypress');
+    $('#save-replay').disabled = false;
 
     socket.emit('rematch');
   });
 
-  
+  $('#save-replay').on('click', () => {
+    $('#save-replay').disabled = true;
+
+    socket.emit('save replay');
+  });
 
   //--- SETTINGS STUFF ---//
   $('.settings').on('click', () => {
@@ -221,7 +306,9 @@ const addButtonEventHandlers = () => {
     const tab = $('#easy-tab');
     const allTabs = $('.leaderboard-tab');
     const replays = $('.replays');
-    const leaderboard = $('.leaderboard');
+    const easyLeaderboard = $('#easy-leaderboard');
+    const mediumLeaderboard = $('#medium-leaderboard');
+    const hardLeaderboard = $('#hard-leaderboard');
 
     // set a "loading data" image
     // get info from DB
@@ -231,14 +318,18 @@ const addButtonEventHandlers = () => {
     tab.css('background-color', '#4444ac');
 
     replays.css('display','none');
-    leaderboard.css('display', 'block');
+    mediumLeaderboard.css('display', 'none');
+    hardLeaderboard.css('display', 'none');
+    easyLeaderboard.css('display', 'block');
   });
 
   $('#medium-tab').on('click', () => {
     const tab = $('#medium-tab');
     const allTabs = $('.leaderboard-tab');
     const replays = $('.replays');
-    const leaderboard = $('.leaderboard');
+    const easyLeaderboard = $('#easy-leaderboard');
+    const mediumLeaderboard = $('#medium-leaderboard');
+    const hardLeaderboard = $('#hard-leaderboard');
 
     // set a "loading data" image
     // get info from DB
@@ -248,14 +339,18 @@ const addButtonEventHandlers = () => {
     tab.css('background-color', '#4444ac');
 
     replays.css('display','none');
-    leaderboard.css('display', 'block');
+    easyLeaderboard.css('display', 'none');
+    hardLeaderboard.css('display', 'none');
+    mediumLeaderboard.css('display', 'block');
   });
 
   $('#hard-tab').on('click', () => {
     const tab = $('#hard-tab');
     const allTabs = $('.leaderboard-tab');
     const replays = $('.replays');
-    const leaderboard = $('.leaderboard');
+    const easyLeaderboard = $('#easy-leaderboard');
+    const mediumLeaderboard = $('#medium-leaderboard');
+    const hardLeaderboard = $('#hard-leaderboard');
 
     // set a "loading data" image
     // get info from DB
@@ -265,14 +360,18 @@ const addButtonEventHandlers = () => {
     tab.css('background-color', '#4444ac');
 
     replays.css('display','none');
-    leaderboard.css('display', 'block');
+    mediumLeaderboard.css('display', 'none');
+    easyLeaderboard.css('display', 'none');
+    hardLeaderboard.css('display', 'block');
   });
 
   $('#replays-tab').on('click', () => {
     const tab = $('#replays-tab');
     const allTabs = $('.leaderboard-tab');
     const replays = $('.replays');
-    const leaderboard = $('.leaderboard');
+    const easyLeaderboard = $('#easy-leaderboard');
+    const mediumLeaderboard = $('#medium-leaderboard');
+    const hardLeaderboard = $('#hard-leaderboard');
 
     // set a "loading data" image
     // get info from DB
@@ -280,8 +379,10 @@ const addButtonEventHandlers = () => {
 
     allTabs.css('background-color', '#3d3d3d');
     tab.css('background-color', '#4444ac');
-
-    leaderboard.css('display', 'none');
+    
+    easyLeaderboard.css('display', 'none');
+    mediumLeaderboard.css('display', 'none');
+    hardLeaderboard.css('display', 'none');
     replays.css('display','block');
   });
 
@@ -292,4 +393,5 @@ const addButtonEventHandlers = () => {
   addEventListenerForSettings('cruiser');
   addEventListenerForSettings('submarine');
   addEventListenerForSettings('destroyer');
+
 };

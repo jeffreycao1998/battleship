@@ -9,7 +9,7 @@ const changePlayerTurn = (io, socket, players) => {
   io.emit('turn', players[0].data.turnToShoot ? 1 : 2);
 }
 
-const emitEndGame = (io, socket) => {
+const emitEndGame = (io, socket, players) => {
   io.emit('won game', socket.data.name);
   io.emit('log move', {
     player: 'won',
@@ -63,35 +63,15 @@ const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players, cl
         if (socket.data.ai) {
           const loserName = players[0].data.name;
 
-          incrementLose(client, players[0].data.name, `${difficulty}Stats`)
+          incrementLose(client, players[0].data.name, `${difficulty}stats`)
         } else {
           const winnerName = players[0].data.name;
 
-          incrementWin(client, winnerName, `${difficulty}Stats`)
+          incrementWin(client, winnerName, `${difficulty}stats`)
         }
-      } else {
-        const gamePlayers = { 
-          p1: {
-            name: players[0].data.name, 
-            result: 'lose',
-          },
-          p2: {
-            name: players[1].data.name,
-            result: 'lose',
-          },
-        }
-
-        if (socket.data.player === 1) {
-          gamePlayers.p1.result = 'win';
-        } else {
-          gamePlayers.p2.result = 'win';
-        }
-
-        storeGameData(client, JSON.stringify(moveSequence), JSON.stringify(gamePlayers));
       }
-        
-      moveSequence = [];
-      emitEndGame(io, socket);
+
+      emitEndGame(io, socket, players);
     }
 
   } else {
