@@ -1,6 +1,7 @@
 .rainbow-text {
   background-image: -webkit-gradient(linear, right top, left top, from(violet), color-stop(indigo), color-stop(blue), color-stop(green), color-stop(yellow), color-stop(orange), to(red));
   background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+  background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
 }
@@ -20,9 +21,6 @@ body {
   position: relative;
 }
 
-/*************************/
-/*******MAIN PAGE*********/
-/*************************/
 #main-page {
   width: 100%;
   height: 100%;
@@ -130,16 +128,15 @@ body {
   font-family: arial;
 }
 
-/*************************/
-/*******GAME PAGE*********/
-/*************************/
 #game-page {
   position: absolute;
   background-color: #f3f3f3;
   max-width: 1920px;
   height: 1080px;
-  display: none;
-  padding: 50px 100px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-left: 100px;
   /****PLAYER BOARDS****/
   /*********LOG**********/
   /*****LEADERBOARD*******/
@@ -148,6 +145,7 @@ body {
 #game-page .game-container {
   width: 970px;
   height: 100%;
+  padding: 50px 0;
 }
 
 #game-page .game-container .container-p1 {
@@ -289,6 +287,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  padding: 50px 0;
 }
 
 #game-page .utility-container .log {
@@ -378,15 +377,178 @@ body {
 }
 
 #game-page .leaderboard-container {
-  min-width: 300px;
-  max-width: 450px;
+  min-width: 400px;
+  max-width: 550px;
   height: 100%;
   border: 1px solid #4444ac;
+  background-color: #4444ac;
+  border: 2px solid #3a3a92;
 }
 
-/*************************/
-/*****WINNING SCREEN******/
-/*************************/
+#game-page .leaderboard-container nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#game-page .leaderboard-container nav .leaderboard-tab {
+  height: 50px;
+  padding: 10px 20px;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  background-color: #3d3d3d;
+  vertical-align: middle;
+  line-height: 30px;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+
+#game-page .leaderboard-container nav .leaderboard-tab:hover {
+  background-color: #474747;
+}
+
+#game-page .leaderboard-container nav #easy-tab {
+  background-color: #4444ac;
+}
+
+#game-page .leaderboard-container nav #replays-tab {
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
+}
+
+#game-page .leaderboard-container .leaderboard {
+  display: none;
+}
+
+#game-page .leaderboard-container .leaderboard .column-identifier {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 20px 13px 0 13px;
+  padding: 10px 15px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background-color: #5c5cdb;
+}
+
+#game-page .leaderboard-container .leaderboard .column-identifier div {
+  display: inline-block;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+}
+
+#game-page .leaderboard-container .leaderboard .column-identifier .player-rank-column {
+  margin-right: 20px;
+}
+
+#game-page .leaderboard-container .leaderboard .column-identifier .win-column {
+  margin-right: 20px;
+}
+
+#game-page .leaderboard-container .leaderboard .stats-container {
+  height: 955px;
+  width: 370px;
+  margin: auto auto;
+  background-color: #f3f3f3;
+}
+
+#game-page .leaderboard-container .leaderboard .stats-container .player-stat {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 10px 12px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#game-page .leaderboard-container .leaderboard .stats-container .player-stat:nth-child(2n) {
+  background-color: #cfcfcf;
+}
+
+#game-page .leaderboard-container .leaderboard .stats-container .player-stat div {
+  display: inline-block;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+#game-page .leaderboard-container .leaderboard .stats-container .player-stat .player-rank-column {
+  margin-right: 20px;
+  width: 45px;
+}
+
+#game-page .leaderboard-container .leaderboard .stats-container .player-stat .win-column {
+  margin-right: 20px;
+  width: 32px;
+}
+
+#game-page .leaderboard-container .leaderboard .stats-container .player-stat .lose-column {
+  width: 42px;
+}
+
+#game-page .leaderboard-container .replays .column-identifier {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 20px 13px 0 13px;
+  padding: 10px 15px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background-color: #5c5cdb;
+}
+
+#game-page .leaderboard-container .replays .column-identifier div {
+  display: inline-block;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+}
+
+#game-page .leaderboard-container .replays .column-identifier .player-rank-column {
+  margin-right: 20px;
+}
+
+#game-page .leaderboard-container .replays .column-identifier .win-column {
+  margin-right: 20px;
+}
+
+#game-page .leaderboard-container .replays .replays-container {
+  height: 955px;
+  width: 370px;
+  margin: 0 auto;
+  background-color: #f3f3f3;
+}
+
+#game-page .leaderboard-container .replays .replays-container .replay {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 10px 17px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#game-page .leaderboard-container .replays .replays-container .replay:nth-child(2n) {
+  background-color: #cfcfcf;
+}
+
+#game-page .leaderboard-container .replays .replays-container .replay .players {
+  text-align: center;
+}
+
 #winning-screen {
   position: absolute;
   max-width: 1920px;
@@ -466,9 +628,6 @@ body {
           transform: translateY(2px);
 }
 
-/*************************/
-/*****SETTINGS SCREEN*****/
-/*************************/
 #settings-screen {
   position: absolute;
   top: 50%;

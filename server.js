@@ -1,4 +1,6 @@
-const io = require('socket.io')(8000);
+require('dotenv').config();
+const io = require('socket.io')(process.env.PORT);
+const { Pool, Client } = require('pg');
 
 const { setNumOfTargets, setInitialData, changeSettings } = require('./src/settingsSetup');
 const { setTurn, incrementCurrentShip } = require('./src/shipSetup');
@@ -7,13 +9,30 @@ const { resetData, resetBoard } = require('./src/reset');
 
 const { setUpComputerBoard, computerAttack } = require('./src/computer');
 
-let whoseTurn = 'p2';
+// connect to postgres server
+const connectionString = process.env.PGCONNECTIONSTRING;
+
+const client = new Client({
+  connectionString: connectionString,
+})
+
+client.connect()
+client.query('SELECT * FROM public."easyStats"', (err, res) => {
+  if (err) {
+    console.log(err.stack)
+  } else {
+    console.log(res.rows);
+  }
+})
+
+// init global variables
 const players = [];
 const shipCoordinates = {
   p1: {},
   p2: {},
 }
 const computer = {};
+let whoseTurn = 'random'; // valid values are 'random', 'p1', 'p2'
 
 io.on('connect', socket => {
   

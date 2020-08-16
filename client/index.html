@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="./src/css/style.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,6 +81,89 @@
       </div>
     </div>
     <div class="leaderboard-container">
+      <nav>
+        <div id="easy-tab" class="leaderboard-tab">EASY</div>
+        <div id="medium-tab" class="leaderboard-tab">MED</div>
+        <div id="hard-tab" class="leaderboard-tab">HARD</div>
+        <div id="replays-tab" class="leaderboard-tab">REPLAYS</div>
+      </nav>
+
+      <div class="leaderboard">
+        <div class="column-identifier">
+          <div class="player">
+            <div class="player-rank-column">RANK</div>
+            <div class="player-name-column">PLAYER</div>
+          </div>
+          <div class="wins">
+            <div class="win-column">WIN</div>
+            <div class="lose-column">LOSE</div>
+          </div>
+        </div>
+        <div class="stats-container">
+          <div class="player-stat">
+            <div class="player">
+              <div class="player-rank-column">1</div>
+              <div class="player-name-column">Jeff</div>
+            </div>
+            <div class="wins">
+              <div class="win-column">10</div>
+              <div class="lose-column">2</div>
+            </div>
+          </div>
+          <div class="player-stat">
+            <div class="player">
+              <div class="player-rank-column">2</div>
+              <div class="player-name-column">ABCDEFGHIJKLMN</div>
+            </div>
+            <div class="wins">
+              <div class="win-column">2</div>
+              <div class="lose-column">10</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="replays">
+
+        <div class="column-identifier">
+            <div class="player-rank-column">PLAYERS</div>
+            <div class="player-name-column">MOVES TO WIN</div>
+            <div class="lose-column">REPLAY</div>
+        </div>
+
+        <div class="replays-container">
+          <div class="replay">
+            <div class="players">
+              <div>Player 1</div>
+              <div>vs</div>
+              <div>Player 2</div>
+            </div>
+            <div class="button-container">
+              <div><button>REPLAY</button></div>
+            </div>
+          </div>
+          <div class="replay">
+            <div class="players">
+              <div>Player 1</div>
+              <div>vs</div>
+              <div>Player 2</div>
+            </div>
+            <div class="button-container">
+              <div><button>REPLAY</button></div>
+            </div>
+          </div>
+          <div class="replay">
+            <div class="players">
+              <div>Player 1</div>
+              <div>vs</div>
+              <div>Player 2</div>
+            </div>
+            <div class="button-container">
+              <div><button>REPLAY</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
   </section>
@@ -90,7 +172,7 @@
     <div class="winning-container-background">
       <div class="winning-container">
         <img class="gif-left" src="./src/images/giphy.gif" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen>
-        <h1 class="winning-text rainbow-text">MEETBEATER24 WON!</h1>
+        <h1 class="winning-text rainbow-text">JEFFREY WON!</h1>
         <img class="gif-right" src="./src/images/giphy.gif" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen>
       </div>
       <button id="rematch">Rematch</button>

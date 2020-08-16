@@ -166,6 +166,8 @@ const addButtonEventHandlers = () => {
     socket.emit('rematch');
   });
 
+  
+
   //--- SETTINGS STUFF ---//
   $('.settings').on('click', () => {
     $('#settings-screen').css('display', 'flex');
@@ -213,6 +215,76 @@ const addButtonEventHandlers = () => {
     $('#settings-screen').css('display', 'none');
   });
 
+
+  //--- LEADERBOARD TABS ---//
+  $('#easy-tab').on('click', () => {
+    const tab = $('#easy-tab');
+    const allTabs = $('.leaderboard-tab');
+    const replays = $('.replays');
+    const leaderboard = $('.leaderboard');
+
+    // set a "loading data" image
+    // get info from DB
+    // replace image with data
+
+    allTabs.css('background-color', '#3d3d3d');
+    tab.css('background-color', '#4444ac');
+
+    replays.css('display','none');
+    leaderboard.css('display', 'block');
+  });
+
+  $('#medium-tab').on('click', () => {
+    const tab = $('#medium-tab');
+    const allTabs = $('.leaderboard-tab');
+    const replays = $('.replays');
+    const leaderboard = $('.leaderboard');
+
+    // set a "loading data" image
+    // get info from DB
+    // replace image with data
+
+    allTabs.css('background-color', '#3d3d3d');
+    tab.css('background-color', '#4444ac');
+
+    replays.css('display','none');
+    leaderboard.css('display', 'block');
+  });
+
+  $('#hard-tab').on('click', () => {
+    const tab = $('#hard-tab');
+    const allTabs = $('.leaderboard-tab');
+    const replays = $('.replays');
+    const leaderboard = $('.leaderboard');
+
+    // set a "loading data" image
+    // get info from DB
+    // replace image with data
+
+    allTabs.css('background-color', '#3d3d3d');
+    tab.css('background-color', '#4444ac');
+
+    replays.css('display','none');
+    leaderboard.css('display', 'block');
+  });
+
+  $('#replays-tab').on('click', () => {
+    const tab = $('#replays-tab');
+    const allTabs = $('.leaderboard-tab');
+    const replays = $('.replays');
+    const leaderboard = $('.leaderboard');
+
+    // set a "loading data" image
+    // get info from DB
+    // replace image with data
+
+    allTabs.css('background-color', '#3d3d3d');
+    tab.css('background-color', '#4444ac');
+
+    leaderboard.css('display', 'none');
+    replays.css('display','block');
+  });
+
   addEventListenerForSettings('shots-per-turn');
   addEventListenerForSettings('board-size');
   addEventListenerForSettings('carrier');
@@ -221,3 +293,5 @@ const addButtonEventHandlers = () => {
   addEventListenerForSettings('submarine');
   addEventListenerForSettings('destroyer');
 };
+
+addButtonEventHandlers();
