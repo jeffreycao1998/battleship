@@ -29,4 +29,4 @@ Click 'R' key to rotate your pieces when placing battleship
 ## CONCLUSION
 
 Clearly needs more work with comments and refactoring (especially in the main server.js file and the utility.js on the client side). I was able to fix all the bugs I found but if you find more please send me an email at jeffreycao1998@hotmail.com so I can get it fixed!
-As I dive deeper into this bootcamp I want to put this project aside for now to focus on the main curriculum. However, it's a project I really want to clean up some time in the future.
+As I dive deeper into this bootcamp I want to put this project aside for now to focus on the main curriculum. However, it's a project I really want to clean up and add to some time in the future.
