@@ -1,5 +1,4 @@
 require('dotenv').config();
-const io = require('socket.io')(process.env.PORT || 8000);
 const express = require('express');
 const http = require('http');
 const server = http.Server(app);
@@ -40,6 +39,8 @@ const shipCoordinates = {
 const computer = {};
 let whoseTurn = 'random'; // valid values are 'random', 'p1', 'p2'
 let moveSequence = [];
+
+const io = require('socket.io')(server);
 
 io.on('connect', socket => {
   getStats(client, 'easy', (data) => {
