@@ -1,15 +1,25 @@
 require('dotenv').config();
 const io = require('socket.io')(process.env.PORT || '8000');
+const express = require('express');
+const http = requi('http');
 const { Pool, Client } = require('pg');
 
 const { setNumOfTargets, setInitialData, changeSettings } = require('./src/settingsSetup');
 const { setTurn, incrementCurrentShip } = require('./src/shipSetup');
 const { handleShot, incrementLose } = require('./src/handleShot');
 const { resetData, resetBoard } = require('./src/reset');
-
 const { setUpComputerBoard, computerAttack } = require('./src/computer');
-
 const { storeGameData, getStats, getReplays } = require('./src/dbCRUD');
+
+
+const app = express();
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/index.html'))
+});
+
+app.listen(process.env.PORT, () => {
+  console.log('listening...')
+});
 
 // connect to postgres server
 
