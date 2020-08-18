@@ -1,4 +1,4 @@
-const socket = io(`http://localhost:${process.env.PORT}`);
+const socket = io();
 
 addButtonEventHandlers();
 
