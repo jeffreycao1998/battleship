@@ -1,5 +1,3 @@
-const nodemon = require("nodemon");
-
 const letters = [
   'A', 'B', 'C', 'D', 
   'E', 'F', 'G', 'H', 
