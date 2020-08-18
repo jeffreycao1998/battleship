@@ -1,7 +1,6 @@
 require('dotenv').config();
 const io = require('socket.io')(process.env.PORT || '8000');
 const express = require('express');
-const http = requi('http');
 const { Pool, Client } = require('pg');
 
 const { setNumOfTargets, setInitialData, changeSettings } = require('./src/settingsSetup');
