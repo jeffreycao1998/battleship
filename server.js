@@ -1,6 +1,8 @@
 require('dotenv').config();
-const io = require('socket.io')(process.env.PORT || '8000');
+const io = require('socket.io')(process.env.PORT || 8000);
 const express = require('express');
+const http = require('http');
+const server = http.Server(app);
 const { Pool, Client } = require('pg');
 
 const { setNumOfTargets, setInitialData, changeSettings } = require('./src/settingsSetup');
@@ -12,11 +14,9 @@ const { storeGameData, getStats, getReplays } = require('./src/dbCRUD');
 
 
 const app = express();
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/index.html'))
-});
+app.use(express.static('client'));
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log('listening...')
 });
 
