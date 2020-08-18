@@ -1,4 +1,4 @@
-const socket = io('localhost:8000');
+const socket = io();
 
 addButtonEventHandlers();
 
