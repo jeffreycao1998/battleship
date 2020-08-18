@@ -89,4 +89,5 @@ const handleShot = (boardClicked, shipCoordinates, cell, io, socket, players, cl
 
 module.exports = {
   handleShot,
+  incrementLose,
 }

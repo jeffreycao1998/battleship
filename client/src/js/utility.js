@@ -201,7 +201,7 @@ const setReplayHistory = (data) => {
         <div>${Math.round(accuracyP2 * 100) || '0'}%</div>
       </div>
       <div class="button-container">
-        <div><button value="${data[i].gameId}">REPLAY</button></div>
+        <div><button value="${data[i].gameId}" disabled>REPLAY</button></div>
       </div>
     </div>`
 

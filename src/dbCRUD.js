@@ -72,7 +72,7 @@ const getStats = (client, difficulty, cb) => {
 };
 
 const getReplays = (client, cb) => {
-  client.query(`SELECT * FROM public.replays ORDER BY "gameId" desc`, (err, res) => {
+  client.query(`SELECT * FROM public.replays ORDER BY "gameid" desc`, (err, res) => {
     if (err) {
       console.log(err.stack);
     } else {

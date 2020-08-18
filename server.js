@@ -4,7 +4,7 @@ const { Pool, Client } = require('pg');
 
 const { setNumOfTargets, setInitialData, changeSettings } = require('./src/settingsSetup');
 const { setTurn, incrementCurrentShip } = require('./src/shipSetup');
-const { handleShot } = require('./src/handleShot');
+const { handleShot, incrementLose } = require('./src/handleShot');
 const { resetData, resetBoard } = require('./src/reset');
 
 const { setUpComputerBoard, computerAttack } = require('./src/computer');
@@ -12,11 +12,13 @@ const { setUpComputerBoard, computerAttack } = require('./src/computer');
 const { storeGameData, getStats, getReplays } = require('./src/dbCRUD');
 
 // connect to postgres server
-const connectionString = process.env.PGCONNECTIONSTRING;
 
 const client = new Client({
-  connectionString: connectionString,
-})
+  connectionString: process.env.PGCONNECTIONSTRING,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 client.connect()
 
@@ -338,6 +340,12 @@ io.on('connect', socket => {
   });
 
   socket.on('concede', (player) => {
+    if (!players[0].data.ready || !players[1].data.ready) return;
+
+    if (players[1].data.ai) {
+      incrementLose(client, players[0].data.name, `${players[1].data.difficulty}stats`)
+    }
+
     io.emit('won game', socket.data.player === 1 ? players[1].data.name : players[0].data.name);
     io.emit('log move', {
       player: 'won',
