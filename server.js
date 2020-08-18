@@ -1,7 +1,4 @@
 require('dotenv').config();
-const express = require('express');
-const http = require('http');
-const server = http.Server(app);
 const { Pool, Client } = require('pg');
 
 const { setNumOfTargets, setInitialData, changeSettings } = require('./src/settingsSetup');
@@ -11,13 +8,19 @@ const { resetData, resetBoard } = require('./src/reset');
 const { setUpComputerBoard, computerAttack } = require('./src/computer');
 const { storeGameData, getStats, getReplays } = require('./src/dbCRUD');
 
-
+const express = require('express');
 const app = express();
+
+const http = require('http');
+const server = http.Server(app);
+
 app.use(express.static('client'));
 
 server.listen(process.env.PORT, () => {
   console.log('listening...')
 });
+
+const io = require('socket.io')(server);
 
 // connect to postgres server
 
@@ -39,8 +42,6 @@ const shipCoordinates = {
 const computer = {};
 let whoseTurn = 'random'; // valid values are 'random', 'p1', 'p2'
 let moveSequence = [];
-
-const io = require('socket.io')(server);
 
 io.on('connect', socket => {
   getStats(client, 'easy', (data) => {
