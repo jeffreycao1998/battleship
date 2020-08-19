@@ -25,7 +25,7 @@ Click 'R' key to rotate your pieces when placing battleship
 
 # Technology Used
 
--NodeJS
--Express
--Socket.io
--PostgreSQL
+- NodeJS
+- Express
+- Socket.io
+- PostgreSQL
