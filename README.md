@@ -30,3 +30,6 @@ R will rotate your pieces when placing battleship
 - Express
 - Socket.io
 - PostgreSQL
+- jQuery
+- HTML
+- SASS
