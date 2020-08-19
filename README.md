@@ -2,7 +2,7 @@
 
 ## Live Server
 
-[Battleship](https://dashboard.heroku.com/apps/battleship-multiplayer-jeff/settings)
+[Battleship](https://battleship-multiplayer-jeff.herokuapp.com/)
 
 # ABOUT
 
