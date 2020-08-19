@@ -19,9 +19,10 @@ Default settings that can be manipulated include:
   
 Upon victory, 2 dancing bears will be displayed next to your name colored with rainbow and fun. From this winning screen you will also be able to save a replay of the game. As of right now saving a replay will allow your accuracy in the 'replays' tab at the top right (full game step through to be implemented in the future). 
 
-## CONTROLS
+# CONTROLS
 
-Click 'R' key to rotate your pieces when placing battleship
+Pressing:
+R will rotate your pieces when placing battleship
 
 # Technology Used
 
