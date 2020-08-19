@@ -1,5 +1,5 @@
 const makeFullscreen = () => {
-  $('#game-page').css("display", "flex");
+  $('#game-page').css("display", "block");
   document.documentElement.requestFullscreen().catch((err) => {
     console.log(err);
   });
