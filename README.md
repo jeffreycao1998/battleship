@@ -2,7 +2,9 @@
 
 ## Live Server
 
-[Battleship](https://battleship-multiplayer-jeff.herokuapp.com/)
+[![alt text](https://github.com/jeffreycao1998/battleship-multiplayer-/blob/master/docs/battleship-demo1.png?raw=true)](https://battleship-multiplayer-jeff.herokuapp.com/)
+
+The live game can be played here! [Battleship!](https://battleship-multiplayer-jeff.herokuapp.com/).
 
 # ABOUT
 
