@@ -1,8 +1,8 @@
 const makeFullscreen = () => {
   $('#game-page').css("display", "flex");
-  // document.documentElement.requestFullscreen().catch((err) => {
-  //   console.log(err);
-  // });
+  document.documentElement.requestFullscreen().catch((err) => {
+    console.log(err);
+  });
 }
 
 const changeTurn = (player) => {
