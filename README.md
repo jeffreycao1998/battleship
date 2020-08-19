@@ -1,32 +1,35 @@
-# battleship-multiplayer-
+# BATTLESHIP
 
-# GET STARTED
+## Live Server
 
-1. clone repo
-2. npm install (to install all packages)
-3. npm start in root directory to start server
-4. open the html file inside the client folder in your browser (prefer google chrome)
+[Battleship](https://battleship-multiplayer-jeff.herokuapp.com/)
 
-## CONTROLS
+# ABOUT
 
-Click 'R' key to rotate your pieces when placing battleship
+Having a dispute with a co-worker? Instead of taking it to the parking lot like the old days let me suggest a new solution. Settle things with an intense game of battleship. The first two players to connect will battle each other, all the rest will become spectators. 
 
-## NOTABLE FEATURES
+The first phase of the game allows players to strategically place their ships. Once both players are ready, the 'shooting phase' will commence. The first player is chosen at random (default setting). Settings can only be changed before the 'shooting phase' begings. After players have both placed their ships down, settings can not be altered.
+Default settings that can be manipulated include:
 
-1. You can play against yourself on the same computer by opening up two windows...(couldn't figure out how to host it on heroku)
-2. Shows wins/loses against the computer of each difficulty (easy, medium, hard)
-3. Replay's tab shows previously saved games with the accuracy of each player. (game step through feature not implemented yet)
-4. Players can rematch each other at the end of the time.
-5. Players can concede once they realise that they've simply been out classed
-6. Players can change the settings (if not currently fighting yet)
-  Settings that can be adjusted include:
-  a) board size
-  b) quantity of each ship
-  c) number of shots a player can take each turn
-  d) which player shoots first (or random)
-7. After entering in your name and pressing 'Battle Friend'/'Battle Ai' the game will go into full screen
+  - player with first shot (random)
+  - shots per turn (3)
+  - board size (10x10)
+  - quantity of each ship (1 of each)
+  - computer difficulty (easy and only if facing computer)
+  
+Upon victory, 2 dancing bears will be displayed next to your name colored with rainbow and fun. From this winning screen you will also be able to save a replay of the game. As of right now saving a replay will allow your accuracy in the 'replays' tab at the top right (full game step through to be implemented in the future). 
 
-## CONCLUSION
+# CONTROLS
 
-Clearly needs more work with comments and refactoring (especially in the main server.js file and the utility.js on the client side). I was able to fix all the bugs I found but if you find more please send me an email at jeffreycao1998@hotmail.com so I can get it fixed!
-As I dive deeper into this bootcamp I want to put this project aside for now to focus on the main curriculum. However, it's a project I really want to clean up and add to some time in the future.
+Pressing:
+R will rotate your pieces when placing battleship
+
+# Technology Used
+
+- NodeJS
+- Express
+- Socket.io
+- PostgreSQL
+- jQuery
+- HTML
+- SASS
